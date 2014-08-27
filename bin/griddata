@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# Usage: griddata -p paramfile -lat lat -lon lon
+
+# crash: Report a problem and exit
+crash()
+{
+    echo "$@" >&2
+    exit 1
+}
+
+# Find absolute path
+abspath()
+{
+   readlink -f $1
+}
+
+# Print usage and exit
+usage()
+{
+   crash "Usage: $0 -p param -lat lat -lon lon"
+}
+
+# Process command line arguments
+while [ $# -gt 0 ]; do
+  case $1 in
+      -p) paramfile=$2; shift 2;;
+    -lat) lat=$2; shift 2;;
+    -lon) lon=$2; shift 2;;
+    *) usage;;
+  esac
+done
+
+# Set parameters
+if [ -z "$lat" ] || [ -z "$lon" ] || [ -z "$paramfile" ]; then
+   usage
+fi
+
+if [ ! -f "$paramfile" ]; then
+   crash "Unable to find paramfile $paramfile"
+fi
+
+datadir=$( mktemp -d --tmpdir=$PWD )
+echo Created data directory $datadir
+
+sed -e '/^[[:space:]]*\(#.*\)*$/d' -e 's/#.*//' -e 's/  */=/' -e 's/^/export /' $paramfile > $datadir/params.psims
+source $datadir/params.psims
+cp -v $campaign/* $datadir/
+cp -v $refdata/* $datadir/
+cp -v $weather/$lat/$lon/* $datadir/
+cp -v $soils/$lat/$lon/* $datadir/
