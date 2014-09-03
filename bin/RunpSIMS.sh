@@ -206,4 +206,9 @@ if [ -n "$postprocess" ]; then
    exit_status=$?
 fi
 
+shopt -s nocasematch
+if [ "$debug" == "true" ]; then
+   run_command /bin/false
+fi
+
 exit 0

@@ -50,6 +50,7 @@ Parameter      | Description                                                    
 ---------      |-----------                                                                            |-------
 agg            | Indicates whether to aggregate                                                        | agg true
 agg\_file      | Mask file for aggregation (only used if agg = true)                                   | agg\_file /project/joshuaelliott/psims/data/masks/agg/fips/USA\_adm\_all\_fips.nc4
+debug          | Force task failure and creation of failures directory                                 | debug true
 delta          | Gridcell spacing in arcminutes                                                        | delta 30
 executable     | Name of executable and arguments to run for each grid                                 | executable "DSCSM045.EXE A X1234567.WHX"
 lat\_zero      | Top edge of the North most grid cell in the campaign                                  | lat\_zero 90
