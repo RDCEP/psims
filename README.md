@@ -13,7 +13,7 @@ nco                      | http://nco.sourceforge.net                     | Requ
 netcdf4                  | http://www.unidata.ucar.edu/software/netcdf    | Required 
 netcdf4 python libraries | http://code.google.com/p/netcdf4-python        | Required
 Oracle Java 7            | http://www.oracle.com/us/downloads/index.html  | Required
-Swift 0.94.1             | http://swiftlang.org                           | Required
+Swift 0.95               | http://swiftlang.org                           | Required
 
 How to Run
 ==========
@@ -62,7 +62,8 @@ num\_lons      | Number of longitudes to be included in final nc4 file (starting
 num\_years     | Number of years to simulate?                                                          | num\_years 31
 out\_file      | Defines the prefix of the final nc4 filename (eg, $out\_file.nc4)                     | out\_file out.psims.dssat45.agmerra.wheat.demo
 outtypes       | File extensions of files to include in output tar file                                | outtypes .WTH,.WHX,.SOL,.OUT,.json,.txt
-PATH           | Defines the bash $PATH that will be used for run (only psims bin/ added by default.   | PATH /project/joshuaelliott/psims/tapps/pdssat:$PATH
+PATH           | Defines the bash $PATH that will be used for run (only psims bin/ added by default)   | PATH /project/joshuaelliott/psims/tapps/pdssat:$PATH
+plots          | Determines if plots will be generated after run. If undefined, defaults to true       | plots false
 refdata        | Directory containing reference data. Will be copied to each simulation                | refdata /Users/davidk/psims/data/common.isimip
 ref\_year      | Reference year (the first year of the simulation)                                     | ref\_year 1980
 s3\_tar\_inputs| Similar to tar_inputs, but download data from an s3 bucket. Requires s3cmd util       | s3\_tar\_inputs s3://psims/soil/hwsd200.wrld.30min.tar.gz
@@ -135,9 +136,8 @@ of time spent staging in and out files to the work directories.
 
 How to Modify Swift Configuration
 =================================
-Determining how Swift runs is controlled by files called conf/<sitename>.xml and conf/<sitename>.cf. These files define the 
-scheduler to use, the location of work and scratch directories, and the amount of parallelism. More information about 
-swift.properties options can be found at http://swiftlang.org/guides/release-0.94/userguide/userguide.html.
+Determining how Swift runs is controlled by a file called conf/swift.properties. This file defines the
+scheduler to use, the location of work and scratch directories, and the amount of parallelism.
 
 Debugging
 =========
@@ -174,7 +174,7 @@ Midway is a cluster at the University of Chicago. More information about Midway 
 
 To run pSIMS on midway, the first thing you need to do is load the required modules.
 
-    $ module load java ant git mono/2.10 hdf5/1.8 nco/4.3 boost/1.50 netcdf/4.2 jasper python/2.7 cdo/1.6 tcllib/1.15 swift 
+    $ module load java ant git mono/2.10 hdf5/1.8 nco/4.3 boost/1.50 netcdf/4.2 jasper python/2.7 cdo/1.6 tcllib/1.15 swift/0.95-RC5
 
 The conf/midway.xml file is configured to use the sandyb slurm partition. The sandyb partition has 16 cores per node. The default configuration
 is to request nodes in chunks of 3, up to the Midway limit of 1536 total cores.
