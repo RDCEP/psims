@@ -1,0 +1,398 @@
+$CULTIVARS:WHCER045  
+
+! LAST EDIT: 22/08/11
+
+! Coefficients used in the Cropsim-Ceres model differ from those used
+! in DSSAT Version 3.5 AND 4.0. They can be calculated (approximately) from 
+! V3.5 coefficients as follows:
+
+! P1V   = P1V(v3.5)*10 
+! P1D   = P1D(V3.5)*20
+! P5    = P5(V3.5)*20 + 430
+! G1    = G1(V3.5)*5 + 5
+! G2    = (G2(V3.5)*0.35+0.65) * P5/20
+! G3    = G3(V3.5)*0.7 
+! PHINT = PHINT(V3.5)
+
+! Converted coefficients,and those listed below,should always be
+! tested by using them with real experiments and comparing model 
+! outputs with measured values. 
+
+*CULTIVARS:WHCER045
+@VAR#  VAR-NAME........  EXP#   ECO#   P1V   P1D    P5    G1    G2    G3 PHINT
+!                                        1     2     3     4     5     6     7
+999991 MINIMA               . 999991     0     0   100    10    10   0.5    30
+999992 MAXIMA               . 999992    60   200   999    50    80   8.0   150
+DFAULT DEFAULT              . DFAULT     5    75   450    30    35   1.0    60
+!!!Below generics added by jwe for psdssat v0.5!!!
+990002 Winter-Default       . IB0001    60    94   564    30    40  1.00   120
+990003 Winter-Default       . IB0001    60    94   564    30    40  1.00   120
+990004 Winter-Default       . IB0001    60    94   564    30    40  1.00   120
+990005 FACULTATIVE          . IB0001    30    94   564    22    40  1.00   120
+990001 SPRING-HIGH LAT      . IB0001    20    94   564    22    40  1.01   120
+990006 SPRING-LOW LAT       . IB0001     5    94   564    22    40  1.01   120
+
+!!!!!!!! Generic pSIMS ME cultivars !!!!!!!!!!!!
+!!!Spring!!!
+ME1XXX ME1-generic          . IB0001    20    94   564    22    39  1.00   120
+ME2AXX ME2A-generic         . IB0001    20    94   564    22    40  1.00   120
+ME2BXX ME2B-generic         . IB0001    20    94   564    22    40  1.00   120
+ME3XXX ME3-generic          . IB0001    20    94   564    22    40  1.00   120
+ME4AXX ME4A-generic         . IB0001    20    94   564    24    37  1.00   120
+ME4BXX ME4B-generic         . IB0001    20    97   564    24    40  1.00   120
+ME4CXX ME4C-generic         . IB0001    20    94   564    24    37  1.00   120
+ME5AXX ME5A-generic         . IB0001    25    94   564    22    37  1.50   100
+ME5BXX ME5B-generic         . IB0001    25    95   564    22    40  1.50   100
+ME6XXX ME6-generic          . IB0001    30   110   564    22    40  1.50   120
+!!!Facultative!!!
+ME7XXX ME7-generic          . IB0001    40    94   564    22    40  0.50   120
+ME8AXX ME8A-generic         . IB0001    40   100   600    22    40  0.50   120
+ME8BXX ME8B-generic         . IB0001    40    94   564    22    40  0.50   120
+ME9XXX ME9-generic          . IB0001    20    94   564    24    37  0.50   120
+!!!Winter wheat!!!
+ME10XX ME10-generic         . IB0001    60   110   600    22    40  0.50   135
+ME11XX ME11-generic         . IB0001    60   130   600    22    40  0.50   135
+ME12XX ME12-generic         . IB0001    60   110   600    22    40  0.50   135
+
+
+!!!!!!!!! MEGA ENVIRONMENT 1 !!!!!
+! Seri 82 Base Cultivar
+IB0010 Seri82BA             . IB0001    20    94   564    22    39  1.03   120
+! Seri 82 Short Life Cycle
+IB0110 Seri82SL             . IB0001    20    94   508    22    39  1.03   120
+! Seri 82 Long Life Cycle
+IB0210 Seri82LL             . IB0001    20    94   621    22    39  1.03   120
+! Seri 82 YIELD (changes in the .ECO File as well as here)
+IB0310 Seri82YE             . IB0101    20    94   564    25    43  1.03   120
+! Seri 82 Yield PLUS SHORT season
+IB0410 Seri82YS             . IB0101    20    94   508    25    43  1.03   120
+! Seri 82 Yield PLUS LONG season
+IB0510 Seri82YL             . IB0101    20    94   621    25    43  1.03   120
+
+
+! PBW343 Base Cultivar
+IB0011 PBW343BA             . IB0001    20    94   564    22    40  1.01   120
+! PBW343 Short Life Cycle
+IB0111 PBW343SL             . IB0001    20    94   508    22    40  1.01   120
+! PBW343 Long Life Cycle
+IB0211 PBW343LL             . IB0001    20    94   621    22    40  1.01   120
+! PBW343 YIELD (Changes in the .ECO file as well as here)
+IB0311 PBW343YE             . IB0101    20    94   564    25    44  1.01   120
+! PBW343 Yield PLUS Short Season
+IB0411 PBW343YS             . IB0101    20    94   508    25    44  1.01   120
+! PBW343 Yield PLUS Long Season
+IB0511 PBW343YL             . IB0101    20    94   621    25    44  1.01   120
+
+
+!!!!!!!!! MEGA ENVIRONEMNT 2A !!!!!!
+
+! Kubsa Base Cultivar
+IB0012 KubsaBA              . IB0001    20    94   564    22    40  1.01   120
+! Kubsa Short Life Cycle
+IB0112 KubsaSL              . IB0001    20    94   508    22    40  1.01   120
+! Kubsa Long Life Cycle
+IB0212 KubsaLL              . IB0001    20    94   621    22    40  1.01   120
+! Kubsa YIELD (Changes in the .ECO file as well as here)
+IB0312 KubsaYE              . IB0101    20    94   564    25    44  1.01   120
+! Kubsa Yield PLUS Short Season
+IB0412 KubsaYS              . IB0101    20    94   508    25    44  1.01   120
+! Kubsa Yield PLUS Long Season
+IB0512 KubsaYL              . IB0101    20    94   621    25    44  1.01   120
+
+!!!!! MEGA ENVIRONMENT 2B !!!!!!!
+
+! Tajan Base Cultivar
+IB0013 TajanBA              . IB0001    20    94   564    24    37  1.01   120
+! Tajan Short Life Cycle
+IB0113 TajanSL              . IB0001    20    94   508    24    37  1.01   120
+! Tajan Long Life Cycle
+IB0213 TajanLL              . IB0001    20    94   621    24    37  1.01   120
+! Tajan YIELD (Changes in the .ECO file as well as here)
+IB0313 TajanYE              . IB0101    20    94   564    27    40  1.01   120
+! Tajan Yield PLUS SHORT season
+IB0413 TajanYS              . IB0101    20    94   508    27    40  1.01   120
+! Tajan Yield PLUS LONG season
+IB0513 TajanYS              . IB0101    20    94   621    27    40  1.01   120
+
+!!!!!! MEGA ENVIRONMENT 3 !!!!!!!
+
+! Alondra Base Cultivar
+IB0014 AlondraBA            . IB0001    20    94   564    22    40  1.01   120
+! Alondra Short Life Cycle
+IB0114 AlondraSL            . IB0001    20    94   508    22    40  1.01   120
+! Alondra Long Life Cycle
+IB0214 AlondraLL            . IB0001    20    94   621    22    40  1.01   120
+! Alondra YIELD (Changes in the .ECO file as well as here)
+IB0314 AlondraYE            . IB0101    20    94   564    25    44  1.01   120
+! Alondra Yield PLUS Short Season
+IB0414 AlondraYS            . IB0101    20    94   508    25    44  1.01   120
+! Alondra Yield PLUS Long Season
+IB0514 AlondraYL            . IB0101    20    94   621    25    44  1.01   120
+
+
+!!!!! MEGA ENVIRONMENT 4A and MEGA ENVIRONMENT 9 Have same CV!!!!!!
+
+! Bacanora Base Cultivar
+IB0015 BacanoraBA           . IB0001    20    94   564    24    37  1.00   120
+! Bacanora Short Life Cycle
+IB0115 BacanoraSL           . IB0001    20    94   508    24    37  1.00   120
+! Bacanora Long Life Cycle
+IB0215 BacanoraLL           . IB0001    20    94   621    24    37  1.00   120
+! Bacanora YIELD (Changes in the .ECO file as well as here)
+IB0315 BacanoraYE           . IB0101    20    94   564    27    40  1.00   120
+! Bacanora Yield PLUS SHORT season
+IB0415 BacanoraYS             . IB0101    20    94   508    27    40  1.00   120
+! Bacanora Yield PLUS LONG season
+IB0515 BacanoraYL             . IB0101    20    94   621    27    40  1.00   120
+
+
+!!!!! MEGA ENVIRONMENT 4B !!!!!!!
+
+! DonErnesto Base Cultivar
+IB0016 DonErnestoBA         . IB0001    20    94   564    22    40  1.01   120
+! DonErnesto Short Life Cycle
+IB0116 DonErnestoSL         . IB0001    20    94   508    22    40  1.01   120
+! DonErnesto Long Life Cycle
+IB0216 DonErnestoLL         . IB0001    20    94   621    22    40  1.01   120
+! DonErnesto YIELD (Changes in the .ECO file as well as here)
+IB0316 DonErnestoYE         . IB0101    20    94   564    25    44  1.01   120
+! DonErnesto Yield PLUS Short Season
+IB0416 DonErnestoYS         . IB0101    20    94   508    25    44  1.01   120
+! DonErnesto Yield PLUS Long Season
+IB0516 DonErnestoYL         . IB0101    20    94   621    25    44  1.01   120
+
+!!!!! MEGA ENVIRONMENT 4C !!!!!
+
+! HI617 Base Cultivar
+IB0017 HI617BA              . IB0001    20    94   564    22    40  1.01   120
+! HI617 Short Life Cycle
+IB0117 HI617SL              . IB0001    20    94   508    22    40  1.01   120
+! HI617 Long Life Cycle
+IB0217 HI617LL              . IB0001    20    94   621    22    40  1.01   120
+! HI617 YIELD (Changes in the .ECO file as well as here)
+IB0317 HI617YE              . IB0101    20    94   564    25    44  1.01   120
+! HI617 Yield PLUS Short Season
+IB0417 HI617YS              . IB0101    20    94   508    25    44  1.01   120
+! HI617 Yield PLUS Long Season
+IB0517 HI617YL              . IB0101    20    94   621    25    44  1.01   120
+
+
+!!!!! MEGA ENVIRONMENT 5A !!!!!!
+
+! Kanchan Base Cultivar
+IB0018 KanchanBA            . IB0001    20    94   564    22    40  1.01   120
+! Kanchan Short Life Cycle
+IB0118 KanchanSL            . IB0001    20    94   508    22    40  1.01   120
+! Kanchan Long Life Cycle
+IB0218 KanchanLL            . IB0001    20    94   621    22    40  1.01   120
+! Kanchan YIELD (Changes in the .ECO file as well as here)
+IB0318 KanchanYE            . IB0101    20    94   564    25    44  1.01   120
+! Kanchan Yield PLUS Short Season
+IB0418 KanchanYS            . IB0101    20    94   508    25    44  1.01   120
+! Kanchan Yield PLUS Long Season
+IB0518 KanchanYL            . IB0101    20    94   621    25    44  1.01   120
+
+
+!!!!!! MEGA ENVIRONMENT 5B !!!!!!!
+
+! Debiera Base Cultivar
+IB0019 DebieraBA            . IB0001    20    94   564    22    40  1.01   120
+! Debiera Short Life Cycle
+IB0119 DebieraSL            . IB0001    20    94   508    22    40  1.01   120
+! Debiera Long Life Cycle
+IB0219 DebieraLL            . IB0001    20    94   621    22    40  1.01   120
+! Debiera YIELD (Changes in the .ECO file as well as here)
+IB0319 DebieraYE            . IB0101    20    94   564    25    44  1.01   120
+! Debiera Yield PLUS Short Season
+IB0419 DebieraYS            . IB0101    20    94   508    25    44  1.01   120
+! Debiera Yield PLUS Long Season
+IB0519 DebieraYL            . IB0101    20    94   621    25    44  1.01   120
+
+!!!!! MEGA ENVIRONMENT 6 !!!!!!!!
+
+
+! Saratov Base Cultivar
+IB0020 SaratovBA            . IB0001    30    94   564    22    40  1.01   120
+! Saratov Short Life Cycle
+IB0120 SaratovSL            . IB0001    30    94   508    22    40  1.01   120
+! Saratov Long Life Cycle
+IB0220 SaratovLL            . IB0001    30    94   621    22    40  1.01   120
+! Saratov YIELD (Changes in the .ECO file as well as here)
+IB0320 SaratovYE            . IB0101    30    94   564    25    44  1.01   120
+! Saratov Yield PLUS Short Season
+IB0420 SaratovYS            . IB0101    30    94   508    25    44  1.01   120
+! Saratov Yield PLUS Long Season
+IB0520 SaratovYL            . IB0101    30    94   621    25    44  1.01   120
+
+
+!!!!! MEGA ENVIRONMENT 7 !!!!!!!!! 
+
+
+! Pehlivan Base Cultivar
+IB0021 PehlivanBA           . IB0001    40    94   564    22    40  1.00   120
+! Pehlivan Short Life Cycle
+IB0121 PehlivanSL           . IB0001    40    94   508    22    40  1.00   120
+! Pehlivan Long Life Cycle
+IB0221 PehlivanLL           . IB0001    40    94   621    22    40  1.00   120
+! Pehlivan YIELD (Changes in the .ECO file as well as here)
+IB0321 PehlivanYE           . IB0101    40    94   564    25    44  1.00   120
+! Pehlivan Yield PLUS Short Season
+IB0421 PehlivanYS           . IB0101    40    94   508    25    44  1.00   120
+! Pehlivan Yield PLUS Long Season
+IB0521 PehlivanYL           . IB0101    40    94   621    25    44  1.00   120
+
+
+
+!!!! MEGA ENVIRONMENT 8A !!!!!!!!
+
+! HalconSNA Base Cultivar
+IB0022 HalconsnaBA          . IB0001    20    94   564    22    40  1.00   120
+! HalconSNA Short Life Cycle
+IB0122 HalconsnaSL          . IB0001    20    94   508    22    40  1.00   120
+! HalconSNA Long Life Cycle
+IB0222 HalconsnaLL          . IB0001    20    94   621    22    40  1.00   120
+! Pehlivan YIELD (Changes in the .ECO file as well as here)
+IB0322 HalconsnaYE          . IB0101    20    94   564    25    44  1.00   120
+! HalconSNA Yield PLUS Short Season
+IB0422 HalconsneYS          . IB0101    20    94   508    25    44  1.00   120
+! HalconSNA Yield PLUS Long Season
+IB0522 HalconsnaYL          . IB0101    20    94   621    25    44  1.00   120
+
+
+!!!! MEGA ENVIRONMENT 8B !!!!!!
+
+! Katya Base Cultivar
+IB0023 KatyaBA              . IB0001    40    94   564    22    40  1.00   120
+! Katya Short Life Cycle
+IB0123 KatyaSL              . IB0001    40    94   508    22    40  1.00   120
+! Katya Long Life Cycle
+IB0223 KatyaLL              . IB0001    40    94   621    22    40  1.00   120
+! Katya YIELD (Changes in the .ECO file as well as here)
+IB0323 KatyaYE              . IB0101    40    94   564    25    44  1.00   120
+! Katya Yield PLUS Short Season
+IB0423 KatyaYS              . IB0101    40    94   508    25    44  1.00   120
+! Katya Yield PLUS Long Season
+IB0523 KatyaYL              . IB0101    40    94   621    25    44  1.00   120
+
+!!!!! MEGA ENVIRONEMNT 9 is with 4 same cultivar!!!!!! 
+!!!!! MEGA ENVIRONMENT 10A !!!!!!!!!
+
+! There is no name for this cultivar yet (ME 10A) I will call it ChinaB Base Cultivar
+IB0024 ChinaBBA             . IB0001    60    94   564    30    40  1.00   120
+! ChinaB Short Life Cycle
+IB0124 ChinaBSL             . IB0001    60    94   508    30    40  1.00   120
+! ChinaB Long Life Cycle
+IB0224 ChinaBLL             . IB0001    60    94   621    30    40  1.00   120
+! ChinaB YIELD (Changes in the .ECO file as well as here)
+IB0324 ChinaBYE             . IB0101    60    94   564    33    44  1.00   120
+! ChinaB Yield PLUS Short Season
+IB0424 ChinaBYS             . IB0101    60    94   508    33    44  1.00   120
+! ChinaB Yield PLUS Long Season
+IB0524 ChinaBYL             . IB0101    60    94   621    33    44  1.00   120
+
+!!!!! MEGA ENVIRONMENT 10B !!!!!!
+
+! Bezostaya Base Cultivar
+IB0025 BezostayaBA          . IB0001    60    94   564    30    40  1.00   120
+! Bezostaya Short Life Cycle
+IB0125 BezostayaSL          . IB0001    60    94   508    30    40  1.00   120
+! Bezostaya Long Life Cycle
+IB0225 BezostayaLL          . IB0001    60    94   621    30    40  1.00   120
+! Bezostaya YIELD (Changes in the .ECO file as well as here)
+IB0325 BezostayaYE          . IB0101    60    94   564    33    44  1.00   120
+! Bezostaya Yield PLUS Short Season
+IB0425 BezostayaYS          . IB0101    60    94   508    33    44  1.00   120
+! Bezostaya Yield PLUS Long Season
+IB0525 BezostayaYL          . IB0101    60    94   621    33    44  1.00   120
+
+!!!!!! MEGA ENVIRONMENT 11A !!!!!!!
+
+! Brigadier Base Cultivar
+IB0026 BrigadierBA          . IB0001    60    94   564    30    40  1.00   120
+! Brigadier Short Life Cycle
+IB0126 BrigadierSL          . IB0001    60    94   508    30    40  1.00   120
+! Brigadier Long Life Cycle
+IB0226 BrigadierLL          . IB0001    60    94   621    30    40  1.00   120
+! Brigadier YIELD (Changes in the .ECO file as well as here)
+IB0326 BrigadierYE          . IB0101    60    94   564    33    44  1.00   120
+! Brigadier Yield PLUS Short Season
+IB0426 BrigadierYS          . IB0101    60    94   508    33    44  1.00   120
+! Brigadier Yield PLUS Long Season
+IB0526 BrigadierYL          . IB0101    60    94   621    33    44  1.00   120
+
+
+
+!!!!! MEGA ENVIRONMENT 11B !!!!!!!
+! There is no name for this cultivar yet (ME 11B) I will call it Korea Base Cultivar
+IB0027 KoreaBA              . IB0001    60    94   564    30    40  1.00   120
+! Korea Short Life Cycle
+IB0127 KoreaSL              . IB0001    60    94   508    30    40  1.00   120
+! Korea Long Life Cycle
+IB0227 KoreaLL              . IB0001    60    94   621    30    40  1.00   120
+! Korea YIELD (Changes in the .ECO file as well as here)
+IB0327 KoreaYE              . IB0101    60    94   564    33    44  1.00   120
+! Korea Yield PLUS Short Season
+IB0427 KoreaYS              . IB0101    60    94   508    33    44  1.00   120
+! Korea Yield PLUS Long Season
+IB0527 KoreaYL              . IB0101    60    94   621    33    44  1.00   120
+
+
+!!!!! MEGA ENVIRONMENT 12 !!!!!!
+! Gerek79 Base Cultivar
+IB0028 Gerek79BA            . IB0001    60    94   564    30    40  1.00   120
+! Gerek79 Short Life Cycle
+IB0128 Gerek79SL            . IB0001    60    94   508    30    40  1.00   120
+! Gerek79 Long Life Cycle
+IB0228 Gerek79LL            . IB0001    60    94   621    30    40  1.00   120
+! Gerek79 YIELD (Changes in the .ECO file as well as here)
+IB0328 Gerek79YE            . IB0101    60    94   564    33    44  1.00   120
+! Gerek79 Yield PLUS Short Season
+IB0428 Gerek79YS            . IB0101    60    94   508    33    44  1.00   120
+! Gerek79 Yield PLUS Long Season
+IB0528 Gerek79YS            . IB0101    60    94   621    33    44  1.00   120
+
+
+
+!!!!!! CULTIVAR USED BY SIKA !!!!
+! Kauz Base Cultivar
+IB0029 KauzBA               . IB0001    20    94   564    24    37  1.01   120
+! Kauz Short Life Cycle
+IB0129 KauzSL               . IB0001    20    94   508    24    37  1.01   120
+! Kautz Long Life Cycle
+IB0229 KauzLL               . IB0001    20    94   621    24    37  1.01   120
+! Kauz YIELD (Changes in the .ECO file as well as here)
+IB0329 KauzYE               . IB0101    20    94   564    27    40  1.01   120
+! Kauz Yield PLUS SHORT season
+IB0429 KauzYS               . IB0101    20    94   508    27    40  1.01   120
+! Kauz Yield PLUS LONG season
+IB0529 KauzYL               . IB0101    20    94   621    27    40  1.01   120
+
+
+! Attila Base Cultivar
+IB0030 AttilaBA             . IB0001    20    94   564    22    39  1.01   120
+! Attila Short Life Cycle
+IB0130 AttilaSL             . IB0001    20    94   508    22    39  1.01   120
+! Attila Long Life Cycle
+IB0230 AttilaLL             . IB0001    20    94   621    22    39  1.01   120
+! Attila YIELD (Changes in the .ECO file as well as here)
+IB0330 AttilaYE             . IB0101    20    94   564    25    43  1.01   120
+! Attila Yield PLUS Short Season
+IB0430 AttilaYS             . IB0101    20    94   508    25    43  1.01   120
+! Attila Yield PLUS Long Season
+IB0530 AttilaYL             . IB0101    20    94   621    25    43  1.01   120
+
+
+                                                                                                                                                                                                                  
+! COEFF       DEFINITION
+! ========    ==========
+! VAR#        Identification code or number for the specific cultivar.
+! VAR-NAME    Name of cultivar.
+! EXP#        Number of experiments used to generate parameters
+! ECO#        Ecotype code for this cultivar,points to entry in ECO file
+! P1V         Days,optimum vernalizing temperature,required for vernalization
+! P1D         Photoperiod response (% reduction in rate/10 h drop in pp)
+! P5          Grain filling (excluding lag) phase duration (oC.d)
+! G1          Kernel number per unit canopy weight at anthesis (#/g)
+! G2          Standard kernel size under optimum conditions (mg)
+! G3          Standard,non-stressed mature tiller wt (incl grain) (g dwt)
+! PHINT       Interval between successive leaf tip appearances (oC.d)

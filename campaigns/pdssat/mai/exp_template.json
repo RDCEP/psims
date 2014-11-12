@@ -1,0 +1,253 @@
+{
+  "soil_id": "XY01234567_1",
+  "person_notes": "Joshua Elliott",
+  "local_name": "GenericName",
+  "wst_id": "GENERIC1",
+  "exname": "X1234568MZ_1",
+  "institution": "Computation Institute, University of Chicago",
+  "fl_name": "GenericField1",
+  "site_name": "GenericLatitude, GenericLongitude",
+  "trno": "1",
+  "trt_name": "GenericTreatment1",
+  "id_field": "GENERIC",
+  "exname_o": "X1234567MZ",
+  "dssat_sequence": {
+    "data": [
+      {
+        "em": "0",
+        "co": "0",
+        "trno": "1",
+        "sq": "1",
+        "trt_name": "GenericTreatment1",
+        "seqid": "1",
+        "sm": "1",
+        "op": "0"
+      }
+    ]
+  },
+  "dssat_simulation_control": {
+    "data": [
+      {
+        "sm": "1",
+        "planting": {
+          "ph2od": "30",
+          "pfday": "113",
+          "ph2ol": "40",
+          "pfyer": "79",
+          "plday": "173",
+          "plyer": "79",
+          "ph2ou": "100",
+          "pstmx": "40",
+          "pstmn": "10"
+        },
+        "irrigation": {
+          "ithru": "100",
+          "iroff": "GS000",
+          "imeth": "IR001",
+          "imdep": "40",
+          "ireff": ".75",
+          "iramt": "10",
+          "ithrl": "75"
+        },
+        "management": {
+          "irrig": "A",
+          "plant": "A",
+          "ferti": "D",
+          "resid": "A",
+          "harvs": "M"
+        },
+        "methods": {
+          "evapo": "F",
+          "nswit": "1",
+          "light": "E",
+          "wther": "M",
+          "infil": "S",
+          "photo": "L",
+          "mesom": "G",
+          "mesol": "2",
+          "incon": "M",
+          "mesev": "S",
+          "hydro": "R"
+        },
+        "outputs": {
+          "grout": "N",
+          "caout": "N",
+          "ovvew": "Y",
+          "niout": "N",
+          "waout": "N",
+          "fropt": "14",
+          "sumry": "Y",
+          "opout": "N",
+          "chout": "N",
+          "diout": "N",
+          "fname": "N",
+          "vbose": "N",
+          "miout": "N"
+        },
+        "harvests": {
+          "hfrst": "0",
+          "hlyer": "80",
+          "hpcnr": "0",
+          "hpcnp": "100",
+          "hlday": "365"
+        },
+        "residues": {
+          "rtime": "1",
+          "ripcn": "100",
+          "ridep": "20"
+        },
+        "general": {
+          "sname": "Irrigated",
+          "nyers": "31",
+          "rseed": "2150",
+          "start": "S",
+          "nreps": "1",
+          "sdday": "001",
+          "sdyer": "79",
+          "smodel": "MZCER"
+        },
+        "nitrogen": {
+          "ncode": "FE001",
+          "nmdep": "30",
+          "naoff": "GS000",
+          "nmthr": "10",
+          "namnt": "50"
+        },
+        "options": {
+          "symbi": "Y",
+          "dises": "N",
+          "phosp": "N",
+          "water": "Y",
+          "till": "N",
+          "co2": "M",
+          "potas": "N",
+          "chem": "N",
+          "nitro": "Y"
+        }
+      }
+    ]
+  },
+  "management": {
+    "events": [
+      {
+        "pldp": "50.0",
+        "plrs": "75",
+        "cul_id": "HY0001",
+        "plds": "R",
+        "crid": "MZ",
+        "plpoe": "5.0",
+        "cul_name": "HY01",
+        "plma": "S",
+        "seqid": "1",
+        "date": "19790101",
+        "pl_name": "1979I",
+        "plpop": "5.0",
+        "event": "planting"
+      },
+      {
+        "fedep": "15",
+        "feamn": "100",
+        "feacd": "AP002",
+        "fe_name": "high",
+        "fecd": "FE001",
+        "seqid": "1",
+        "date": "1",
+        "event": "fertilizer"
+      },
+      {
+        "fedep": "15",
+        "feamn": "100",
+        "feacd": "AP002",
+        "fe_name": "high",
+        "fecd": "FE001",
+        "seqid": "1",
+        "date": "45",
+        "event": "fertilizer"
+      },
+      {
+        "irstg": "GS000",
+        "irmdp": "40",
+        "iame": "IR001",
+        "irept": "100",
+        "irthr": "75",
+        "seqid": "1",
+        "ireff": "1.00",
+        "date": "20110101",
+        "iamt": "10",
+        "irval": "79.0",
+        "event": "irrigation",
+        "irop": "IR001"
+      },
+      {
+        "seqid": "1",
+        "ha_name": "Maize",
+        "date": "19811231",
+        "event": "harvest"
+      }
+    ]
+  },
+  "dssat_environment_modification": {
+    "data": [
+      {
+        "em": "1",
+        "data": {
+          "erad": "A   0",
+          "ewind": "A   0",
+          "emin": "A   0",
+          "odday": "001",
+          "emax": "A   0",
+          "erain": "A 0.0",
+          "eday": "A   0",
+          "eco2": "R 320",
+          "envnam": "EnvMod",
+          "odyer": "79",
+          "edew": "A   0"
+        }
+      }
+    ]
+  }, 
+  "soil": {
+    "soil_id": "XY01234567_1",
+    "soilLayer": [
+      {
+        "sllb": "15"
+      }
+    ],
+    "sa": "1",
+    "sadat": "19790410"
+  },
+  "initial_conditions": {
+    "icpcr": "MZ",
+    "icrp": "0",
+    "icrze": "1",
+    "icdat": "19790101",
+    "icrip": "100",
+    "icrn": "1",
+    "ic_name": "1000kg Residue",
+    "icrdp": "10",
+    "icrag": "1000",
+    "icrz#": "1",
+    "soilLayer": [
+      {
+        "icno3": ".1",
+        "icbl": "10",
+        "icnh4": ".1"
+      },
+      {
+        "icno3": ".1",
+        "icbl": "40",
+        "icnh4": ".1"
+      },
+      {
+        "icno3": ".1",
+        "icbl": "100",
+        "icnh4": ".1"
+      },
+      {
+        "icno3": ".1",
+        "icbl": "200",
+        "icnh4": ".1"
+      }
+    ]
+  }
+}
