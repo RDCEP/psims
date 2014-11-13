@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 pSIMS
 =====
 pSIMS is a suite of tools, data, and models developed to facilitate access to
@@ -21,11 +20,6 @@ Elliott, J., D. Kelly, J. Chryssanthacopoulos, M. Glotter, Kanika Jhunjhnuwala, 
 Dependencies
 ============
 You need these packages installed to run pSIMS:
-=======
-Prerequisites
-=============
-You need these packages to run pSIMS:
->>>>>>> 159c61aef20c6eaab38e92cdc1edc58535d4d445
 
 Package                  | Location                                       | Type 
 -------                  | --------                                       | ----
@@ -165,7 +159,6 @@ If a value in your params file is a "special" character (as defined at http://tl
 tappwth          "psims2WTH.py -o \"GENERIC1.WTH\" -v tasmin,tasmax,rsds,pr,wind"
 ```
 
-<<<<<<< HEAD
 Obtaining Datasets
 ==================
 We have made two full global datasets available to pSIMS users:
@@ -179,8 +172,6 @@ The endpoint name is called davidk#psims. Harmonized World Soil Database
 files are available in the /soils/hwsd200.wrld.30min directory. AgMERRA 
 climate data is available in the /clim/ggcmi/agmerra directory.
 
-=======
->>>>>>> 159c61aef20c6eaab38e92cdc1edc58535d4d445
 Testing results
 ===============
 The -t option allows you to compare the result of your current run to a known good result. The result directory
