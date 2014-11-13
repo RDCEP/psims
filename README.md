@@ -1,6 +1,31 @@
+<<<<<<< HEAD
+pSIMS
+=====
+pSIMS is a suite of tools, data, and models developed to facilitate access to
+high-resolution climate impact modeling. This system largely automates the 
+labor-intensive processes of creating and running data ingest and 
+transformation pipelines and allows researchers to use high-performance 
+computing to run simulations that extend over large spatial extents, run for 
+many growing seasons, or evaluate many alternative management practices or 
+other input configurations. In so doing, pSIMS dramatically reduces the time 
+and technical skills required to investigate global change vulnerability, 
+impacts and potential adaptations. pSIMS is designed to support integration 
+and high-resolution application of any site-based climate impact model that 
+can be compiled in a Unix environment (with a focus on primary production: 
+agriculture, livestock, and forestry). 
+
+For more information about pSIMS, please see the following paper:
+
+Elliott, J., D. Kelly, J. Chryssanthacopoulos, M. Glotter, Kanika Jhunjhnuwala, N. Best, M. Wilde, and I. Foster, (2014). The Parallel System for Integrating Impact Models and Sectors (pSIMS). Environmental Modeling and Software: Special Issue on Agricultural systems modeling & software. Available online, May 22, 2014. http://dx.doi.org/10.1016/j.envsoft.2014.04.008
+
+Dependencies
+============
+You need these packages installed to run pSIMS:
+=======
 Prerequisites
 =============
 You need these packages to run pSIMS:
+>>>>>>> 159c61aef20c6eaab38e92cdc1edc58535d4d445
 
 Package                  | Location                                       | Type 
 -------                  | --------                                       | ----
@@ -14,6 +39,55 @@ netcdf4                  | http://www.unidata.ucar.edu/software/netcdf    | Requ
 netcdf4 python libraries | http://code.google.com/p/netcdf4-python        | Required
 Oracle Java 7            | http://www.oracle.com/us/downloads/index.html  | Required
 Swift 0.95               | http://swiftlang.org                           | Required
+
+Compiling the DSSAT Model
+=========================
+The source code for the DSSAT model is hosted in a private github repository.
+To obtain access, you may request to join the DSSAT github group at 
+https://github.com/DSSAT.
+
+When you have downloaded the source code, there are a few changes that need
+to be applied in order for it to compile on Linux. In the root of the DSSAT
+source tree, run the following command to apply these changes:
+
+$ patch -p1 < /psimsroot/models/pdssat/dssat46.patch (adjust path to psims as needed)
+
+Next, compile DSSAT by running 'make'. This step requires the Intel fortran
+compiler.
+
+When compilation is completed, you will see DSSAT available as an executable 
+called DSCSM046.EXE.
+
+Compiling the APSIM model
+=========================
+Compiling APSIM requires the following packages be installed on your system:
+
+* g++
+* gfortran
+* mono-devel
+* mono-vbnc
+* libboost-all-dev
+* libxml2-dev
+* tcl8.5-dev
+* r-recommended
+
+To obtain the source code for APSIM 7.6, run the following command:
+
+$ svn co http://apsrunet.apsim.info/svn/apsim/tags/Apsim76
+
+There are a few changes required in order to get APSIM compiled cleanly. To apply
+these changes, run:
+
+$ patch -p0 -i /psimsroot/models/papsim/apsim76.patch (adjust path to psims as needed)
+
+Then finally, to compile:
+
+$ cd Model/Build
+$ ./MakeAll.sh
+
+This will create two executables that pSIMS will use:
+* Model/Apsim.exe
+* Model/ApsimModel.exe
 
 How to Run
 ==========
@@ -91,6 +165,22 @@ If a value in your params file is a "special" character (as defined at http://tl
 tappwth          "psims2WTH.py -o \"GENERIC1.WTH\" -v tasmin,tasmax,rsds,pr,wind"
 ```
 
+<<<<<<< HEAD
+Obtaining Datasets
+==================
+We have made two full global datasets available to pSIMS users:
+
+* AgMERRA Climate Forcing Dataset for Agricultural Modeling
+* Harmonized World Soil Database
+
+Due to the size of these datasets, they are available only via Globus online.
+If you do not already have a Globus account, you may create one at globus.org.
+The endpoint name is called davidk#psims. Harmonized World Soil Database 
+files are available in the /soils/hwsd200.wrld.30min directory. AgMERRA 
+climate data is available in the /clim/ggcmi/agmerra directory.
+
+=======
+>>>>>>> 159c61aef20c6eaab38e92cdc1edc58535d4d445
 Testing results
 ===============
 The -t option allows you to compare the result of your current run to a known good result. The result directory
