@@ -168,9 +168,9 @@ We have made two full global datasets available to pSIMS users:
 
 Due to the size of these datasets, they are available only via Globus online.
 If you do not already have a Globus account, you may create one at globus.org.
-The endpoint name is called davidk#psims. Harmonized World Soil Database 
-files are available in the /soils/hwsd200.wrld.30min directory. AgMERRA 
-climate data is available in the /clim/ggcmi/agmerra directory.
+The endpoint name is *davidk#psims*. Harmonized World Soil Database 
+files are available in the */soils/hwsd200.wrld.30min* directory. AgMERRA 
+climate data is available in the */clim/ggcmi/agmerra directory*.
 
 Testing results
 ===============
