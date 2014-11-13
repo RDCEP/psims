@@ -1,6 +1,6 @@
 Prerequisites
 =============
-You need these packages to run pSIMs:
+You need these packages to run pSIMS:
 
 Package                  | Location                                       | Type 
 -------                  | --------                                       | ----
@@ -66,7 +66,7 @@ PATH           | Defines the bash $PATH that will be used for run (only psims bi
 plots          | Determines if plots will be generated after run. If undefined, defaults to true       | plots false
 refdata        | Directory containing reference data. Will be copied to each simulation                | refdata /Users/davidk/psims/data/common.isimip
 ref\_year      | Reference year (the first year of the simulation)                                     | ref\_year 1980
-s3\_tar\_inputs| Similar to tar_inputs, but download data from an s3 bucket. Requires s3cmd util       | s3\_tar\_inputs s3://psims/soil/hwsd200.wrld.30min.tar.gz
+s3\_tar\_inputs| Similar to tar\_inputs, but download data from an s3 bucket. Requires s3cmd util      | s3\_tar\_inputs s3://psims/soil/hwsd200.wrld.30min.tar.gz
 scens          | Number of scenarios in the campaign                                                   | scens 8
 soils          | Directory containing soils                                                            | soils /Users/davidk/psims/data/soils/hwsd200.wrld.30min
 tar\_inputs    | Defines a list of tar (or tar.gz) files to be extracted into your current directory   | tar\_inputs /path/myfile.tar,/path/myfile2.tar
@@ -91,7 +91,6 @@ If a value in your params file is a "special" character (as defined at http://tl
 tappwth          "psims2WTH.py -o \"GENERIC1.WTH\" -v tasmin,tasmax,rsds,pr,wind"
 ```
 
-
 Testing results
 ===============
 The -t option allows you to compare the result of your current run to a known good result. The result directory
@@ -113,7 +112,7 @@ A gridlist file contains a list of latitudes and longitudes to be processed, in 
 
 The latitude/longitude format is also appended to the weather and soils variables to determine the pathname to input 
 files for a specific grid point. For example, suppose weather is set to /Users/davidk/psims/data/agmerra. For grid 
-104/114, psims will include all files in the path: /Users/davidk/psims/data/agmerra/104/114/*.
+104/114, psims will include all files in the path: /Users/davidk/psims/data/agmerra/104/114/\*.
 
 It is important then, that for data exists in the soils and weather directory for each grid point. Missing data will 
 result in errors.
@@ -128,8 +127,8 @@ Which files get included in the file is determined by how you set "outtypes" in 
 The parts/ directory contains the output nc files for each grid being processed. When grid 100/546 is done processing,
 you will see a file called runNNN/parts/100/546.psims.nc.
 
-The combined nc file is saved in the runNNN directory. Its name depends on the value of "out_file" in your
-params file. If you set out_file to "out.psims.apsim75.cfsr.whea", the final combined nc file would be called "out.psims.apsim75.cfsr.whea.nc4".
+The combined nc file is saved in the runNNN directory. Its name depends on the value of "out\_file" in your
+params file. If you set out\_file to "out.psims.apsim75.cfsr.whea", the final combined nc file would be called "out.psims.apsim75.cfsr.whea.nc4".
 
 At the end of each run, a plot is generated in the run directory called activitylot.png. It shows the number of active jobs over time, and the amount
 of time spent staging in and out files to the work directories.
@@ -145,7 +144,7 @@ When problems occur, there are a few places to look to get answers about why the
 Swift. You will see this info on your screen as psims is running. Since there are many tasks running at once, it may scroll by your screen
 too quickly. This output will also be recorded in runNNN/swift.out.
 
-Another place to look is the runNNN/*.d directory. An info log file should exist in that directory for each failing task. The info file contains
+Another place to look is the runNNN/\*.d directory. An info log file should exist in that directory for each failing task. The info file contains
 the stdout and stderr output of RunpSIMS.sh. Each significant command should be logged with a timestamp so you can track the progress and get a
 better idea of what's happening.
 
@@ -170,7 +169,7 @@ the intermediate programs involved. From within the runNNN directory, you may ru
 
 Running on the Midway cluster
 =============================
-Midway is a cluster at the University of Chicago. More information about Midway can be found at http://rcc.uchicago.edu/resources/midway_specs.html.
+Midway is a cluster at the University of Chicago. More information about Midway can be found at http://rcc.uchicago.edu/resources/midway\_specs.html.
 
 To run pSIMS on midway, the first thing you need to do is load the required modules.
 
