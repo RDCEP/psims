@@ -1,0 +1,209 @@
+From d5242d13905e5005af015fd60e40077df1887387 Mon Sep 17 00:00:00 2001
+From: David Kelly <davidkelly999@gmail.com>
+Date: Thu, 13 Nov 2014 11:38:38 -0600
+Subject: [PATCH 1/2] Makefiles
+
+---
+ Makefile        | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ OP_OBS/Makefile | 11 +++++++++++
+ ORYZA/Makefile  | 24 ++++++++++++++++++++++++
+ SALUS/Makefile  | 12 ++++++++++++
+ ttutil/Makefile | 23 +++++++++++++++++++++++
+ 5 files changed, 115 insertions(+)
+ create mode 100755 Makefile
+ create mode 100644 OP_OBS/Makefile
+ create mode 100644 ORYZA/Makefile
+ create mode 100644 SALUS/Makefile
+ create mode 100644 ttutil/Makefile
+
+diff --git a/Makefile b/Makefile
+new file mode 100755
+index 0000000..703731f
+--- /dev/null
++++ b/Makefile
+@@ -0,0 +1,45 @@
++FC = ifort
++FFLAGS =  -nowarn -g -std95 -fixed -traceback
++TARGET = DSCSM046.EXE
++
++OBJECTS = $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.for, %.o, $(wildcard *.for)) $(patsubst %.FOR, %.o, $(wildcard *.FOR)) $(patsubst %.F90, %.o, $(wildcard *.F90))
++
++all: modules dirs $(TARGET)
++
++$(TARGET): $(OBJECTS)
++	$(FC) -o $@ SALUS/*.o ttutil/*.o ORYZA/*.o OP_OBS/*.o $^ $(FFLAGS)
++
++%.o: %.f90 $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++%.o: %.F90 $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++%.o: %.for $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++%.o: %.FOR $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++dirs:
++	cd SALUS; make
++	cd ttutil; make
++	cd ORYZA; make
++	cd OP_OBS; make
++
++clean:
++	$(RM) $(TARGET) $(OBJECTS) *.mod
++	cd SALUS; make clean
++	cd ttutil; make clean
++	cd ORYZA; make clean
++	cd OP_OBS; make clean
++
++modules:
++	ifort -fixed -c ModuleDefs.for
++	ifort -fixed -c OPHEAD.FOR
++	ifort -fixed -c SoilMixing.for
++	ifort -fixed -c SLigCeres.for
++	ifort -fixed -c OPSUM.for
++	ifort -fixed -c SC_CNG_mods.for
++	ifort -fixed -c IPSOIL.FOR
++
+diff --git a/OP_OBS/Makefile b/OP_OBS/Makefile
+new file mode 100644
+index 0000000..b27745b
+--- /dev/null
++++ b/OP_OBS/Makefile
+@@ -0,0 +1,11 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I.. -I../ttutil
++OBJECTS = $(patsubst %.F90, %.o, $(wildcard *.F90))
++all: $(OBJECTS)
++
++%.o: %.F90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++clean:
++	rm $(TARGET) $(OBJECTS) 
+diff --git a/ORYZA/Makefile b/ORYZA/Makefile
+new file mode 100644
+index 0000000..400240f
+--- /dev/null
++++ b/ORYZA/Makefile
+@@ -0,0 +1,24 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I.. -I../ttutil
++OBJECTS = $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.F90, %.o, $(wildcard *.F90)) $(patsubst %.for, %.o, $(wildcard *.for))
++all: VARIABLE.o OR_ROOTG.o $(OBJECTS)
++
++%.o: %.f90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.F90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.for
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++
++VARIABLE.o:
++	$(FC) -c $(FFLAGS) $(INC) VARIABLE.F90
++
++OR_ROOTG.o:
++	$(FC) -c $(FFLAGS) $(INC) OR_ROOTG.F90
++
++clean:
++	rm $(TARGET) $(OBJECTS) *.mod
+diff --git a/SALUS/Makefile b/SALUS/Makefile
+new file mode 100644
+index 0000000..76202fb
+--- /dev/null
++++ b/SALUS/Makefile
+@@ -0,0 +1,12 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I..
++OBJECTS = $(patsubst %.f90, %.o, $(wildcard *.f90))
++
++all: $(OBJECTS)
++
++%.o: %.f90 
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++clean:
++	rm $(TARGET) $(OBJECTS) 
+diff --git a/ttutil/Makefile b/ttutil/Makefile
+new file mode 100644
+index 0000000..9ce9181
+--- /dev/null
++++ b/ttutil/Makefile
+@@ -0,0 +1,23 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I..
++OBJECTS = $(patsubst %.for, %.o, $(wildcard *.for)) $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.FOR, %.o, $(wildcard *.FOR))
++all: outdat.o ttutilprefs.o $(OBJECTS)
++
++%.o: %.for 
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.f90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.FOR
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++outdat.o: 
++	$(FC) -c $(FFLAGS) $(INC) outdat.f90
++
++ttutilprefs.o:
++	$(FC) -c $(FFLAGS) $(INC) ttutilprefs.f90
++
++clean:
++	rm $(TARGET) $(OBJECTS) *.mod
+-- 
+1.8.4
+
+
+From 4a9b1cd62b6aaaf0871893aa41c7af1383d814fa Mon Sep 17 00:00:00 2001
+From: David Kelly <davidkelly999@gmail.com>
+Date: Thu, 13 Nov 2014 11:39:14 -0600
+Subject: [PATCH 2/2] Changes to run on linux
+
+---
+ CRSIMDEF.FOR   | 4 ++--
+ ModuleDefs.for | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CRSIMDEF.FOR b/CRSIMDEF.FOR
+index f2e5a56..d887d5e 100644
+--- a/CRSIMDEF.FOR
++++ b/CRSIMDEF.FOR
+@@ -7,7 +7,7 @@
+ 
+       SAVE
+ 
+-      CHARACTER(LEN=1),PARAMETER::SLASH = '\' !DOS, Windows
+-!     CHARACTER(LEN=1),PARAMETER::SLASH = '/' !Linux, Unix
++!     CHARACTER(LEN=1),PARAMETER::SLASH = '\' !DOS, Windows
++      CHARACTER(LEN=1),PARAMETER::SLASH = '/' !Linux, Unix
+ 
+       END MODULE CRSIMDEF
+diff --git a/ModuleDefs.for b/ModuleDefs.for
+index 9c7d1c1..c588d57 100644
+--- a/ModuleDefs.for
++++ b/ModuleDefs.for
+@@ -40,8 +40,8 @@ C             CHP Added TRTNUM to CONTROL variable.
+ !=======================================================================
+ !     Change this line to switch between Windows and Linux compilers
+ !     Operating system
+-      CHARACTER(LEN=5), PARAMETER :: OPSYS = 'WINDO'   !DOS, Windows
+-!     CHARACTER(LEN=5), PARAMETER :: OPSYS = 'LINUX'   !Linux, UNIX
++!     CHARACTER(LEN=5), PARAMETER :: OPSYS = 'WINDO'   !DOS, Windows
++      CHARACTER(LEN=5), PARAMETER :: OPSYS = 'LINUX'   !Linux, UNIX
+ 
+ !=======================================================================
+ !     Compiler directives used to set library for system calls
+-- 
+1.8.4
+
