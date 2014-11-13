@@ -34,26 +34,104 @@ DFAULT DEFAULT              . DFAULT     5    75   450    30    35   1.0    60
 
 !!!!!!!! Generic pSIMS ME cultivars !!!!!!!!!!!!
 !!!Spring!!!
-ME1XXX ME1-generic          . IB0001    20    94   564    22    39  1.00   120
-ME2AXX ME2A-generic         . IB0001    20    94   564    22    40  1.00   120
-ME2BXX ME2B-generic         . IB0001    20    94   564    22    40  1.00   120
-ME3XXX ME3-generic          . IB0001    20    94   564    22    40  1.00   120
-ME4AXX ME4A-generic         . IB0001    20    94   564    24    37  1.00   120
-ME4BXX ME4B-generic         . IB0001    20    97   564    24    40  1.00   120
-ME4CXX ME4C-generic         . IB0001    20    94   564    24    37  1.00   120
-ME5AXX ME5A-generic         . IB0001    25    94   564    22    37  1.50   100
-ME5BXX ME5B-generic         . IB0001    25    95   564    22    40  1.50   100
-ME6XXX ME6-generic          . IB0001    30   110   564    22    40  1.50   120
+ME1XX0 ME1-generic-0        . JE0001    10    94   508    22    39  1.00   120
+ME1XX1 ME1-generic-1        . JE0001    15    94   530    22    39  1.00   120
+ME1XX2 ME1-generic-2        . JE0002    20    94   553    22    39  1.00   120
+ME1XX3 ME1-generic-3        . JE0003    20    94   575    22    39  1.00   120
+ME1XX4 ME1-generic-4        . JE0004    20    94   598    22    39  1.00   120
+ME1XX5 ME1-generic-5        . JE0005    20    94   621    22    39  1.00   120
+!
+ME2AX0 ME2A-generic-0       . JE0001    10    94   508    22    40  1.00   120
+ME2AX1 ME2A-generic-1       . JE0001    15    94   530    22    40  1.00   120
+ME2AX2 ME2A-generic-2       . JE0002    20    94   553    22    40  1.00   120
+ME2AX3 ME2A-generic-3       . JE0003    20    94   575    22    40  1.00   120
+ME2AX4 ME2A-generic-4       . JE0004    20    94   598    22    40  1.00   120
+ME2AX5 ME2A-generic-5       . JE0005    20    94   621    22    40  1.00   120
+!
+ME2BX0 ME2B-generic-0       . JE0001    10    94   508    22    40  1.00   120
+ME2BX1 ME2B-generic-1       . JE0001    15    94   530    22    40  1.00   120
+ME2BX2 ME2B-generic-2       . JE0002    20    94   553    22    40  1.00   120
+ME2BX3 ME2B-generic-3       . JE0003    20    94   575    22    40  1.00   120
+ME2BX4 ME2B-generic-4       . JE0004    20    94   598    22    40  1.00   120
+ME2BX5 ME2B-generic-5       . JE0005    20    94   621    22    40  1.00   120
+!
+ME3XX0 ME3-generic-0        . JE0001    10    94   508    22    40  1.00   120
+ME3XX1 ME3-generic-1        . JE0001    15    94   530    22    40  1.00   120
+ME3XX2 ME3-generic-2        . JE0002    20    94   553    22    40  1.00   120
+ME3XX3 ME3-generic-3        . JE0003    20    94   575    22    40  1.00   120
+ME3XX4 ME3-generic-4        . JE0004    20    94   598    22    40  1.00   120
+ME3XX5 ME3-generic-5        . JE0005    20    94   621    22    40  1.00   120
+!
+ME4AX0 ME4A-generic-0       . JE0001    10    94   508    24    37  1.00   120
+ME4AX1 ME4A-generic-1       . JE0001    15    94   530    24    37  1.00   120
+ME4AX2 ME4A-generic-2       . JE0002    20    94   553    24    37  1.00   120
+ME4AX3 ME4A-generic-3       . JE0003    20    94   575    24    37  1.00   120
+ME4AX4 ME4A-generic-4       . JE0004    20    94   598    24    37  1.00   120
+ME4AX5 ME4A-generic-5       . JE0005    20    94   621    24    37  1.00   120
+!
+ME4CX0 ME4C-generic-0       . JE0001    10    94   508    24    37  1.00   120
+ME4CX1 ME4C-generic-1       . JE0001    15    94   530    24    37  1.00   120
+ME4CX2 ME4C-generic-2       . JE0002    20    94   553    24    37  1.00   120
+ME4CX3 ME4C-generic-3       . JE0003    20    94   575    24    37  1.00   120
+ME4CX4 ME4C-generic-4       . JE0004    20    94   598    24    37  1.00   120
+ME4CX5 ME4C-generic-5       . JE0005    20    94   621    24    37  1.00   120
+!
+ME5AX0 ME5A-generic-0       . JE0001    15    94   508    22    37  1.50   100
+ME5AX1 ME5A-generic-1       . JE0001    20    94   530    22    37  1.50   100
+ME5AX2 ME5A-generic-2       . JE0002    25    94   553    22    37  1.50   100
+ME5AX3 ME5A-generic-3       . JE0003    25    94   575    22    37  1.50   100
+ME5AX4 ME5A-generic-4       . JE0004    25    94   598    22    37  1.50   100
+ME5AX5 ME5A-generic-5       . JE0005    25    94   621    22    37  1.50   100
+!
+ME6XX0 ME6-generic-0        . JE0001    20   110   508    22    40  1.50   120
+ME6XX1 ME6-generic-1        . JE0001    25   110   530    22    40  1.50   120
+ME6XX2 ME6-generic-2        . JE0002    30   110   553    22    40  1.50   120
+ME6XX3 ME6-generic-3        . JE0003    30   110   575    22    40  1.50   120
+ME6XX4 ME6-generic-4        . JE0004    30   110   598    22    40  1.50   120
+ME6XX5 ME6-generic-5        . JE0005    30   110   621    22    40  1.50   120
 !!!Facultative!!!
-ME7XXX ME7-generic          . IB0001    40    94   564    22    40  0.50   120
-ME8AXX ME8A-generic         . IB0001    40   100   600    22    40  0.50   120
-ME8BXX ME8B-generic         . IB0001    40    94   564    22    40  0.50   120
-ME9XXX ME9-generic          . IB0001    20    94   564    24    37  0.50   120
+ME7XX0 ME7-generic-0        . JE0001    30    94   508    22    40  0.50   120
+ME7XX1 ME7-generic-1        . JE0001    35    94   530    22    40  0.50   120
+ME7XX2 ME7-generic-2        . JE0002    40    94   553    22    40  0.50   120
+ME7XX3 ME7-generic-3        . JE0003    40    94   575    22    40  0.50   120
+ME7XX4 ME7-generic-4        . JE0004    40    94   598    22    40  0.50   120
+ME7XX5 ME7-generic-5        . JE0005    40    94   621    22    40  0.50   120
+!
+ME8AX0 ME8A-generic-0       . JE0001    30   100   540    22    40  0.50   120
+ME8AX1 ME8A-generic-1       . JE0001    35   100   564    22    40  0.50   120
+ME8AX2 ME8A-generic-2       . JE0002    40   100   588    22    40  0.50   120
+ME8AX3 ME8A-generic-3       . JE0003    40   100   612    22    40  0.50   120
+ME8AX4 ME8A-generic-4       . JE0004    40   100   636    22    40  0.50   120
+ME8AX5 ME8A-generic-5       . JE0005    40   100   661    22    40  0.50   120
+!
+ME9XX0 ME9-generic-0        . JE0001    20    94   508    24    37  0.50   120
+ME9XX1 ME9-generic-1        . JE0001    25    94   530    24    37  0.50   120
+ME9XX2 ME9-generic-2        . JE0002    30    94   553    24    37  0.50   120
+ME9XX3 ME9-generic-3        . JE0003    30    94   575    24    37  0.50   120
+ME9XX4 ME9-generic-4        . JE0004    30    94   598    24    37  0.50   120
+ME9XX5 ME9-generic-5        . JE0005    30    94   621    24    37  0.50   120
 !!!Winter wheat!!!
-ME10XX ME10-generic         . IB0001    60   110   600    22    40  0.50   135
-ME11XX ME11-generic         . IB0001    60   130   600    22    40  0.50   135
-ME12XX ME12-generic         . IB0001    60   110   600    22    40  0.50   135
-
+ME10X0 ME10-generic-0       . JE0001    50   110   540    22    40  0.50   135
+ME10X1 ME10-generic-1       . JE0001    55   110   564    22    40  0.50   135
+ME10X2 ME10-generic-2       . JE0002    60   110   588    22    40  0.50   135
+ME10X3 ME10-generic-3       . JE0003    60   110   612    22    40  0.50   135
+ME10X4 ME10-generic-4       . JE0004    60   110   636    22    40  0.50   135
+ME10X5 ME10-generic-5       . JE0005    60   110   661    22    40  0.50   135
+!
+ME11X0 ME11-generic-0       . JE0001    50   130   540    22    40  0.50   135
+ME11X1 ME11-generic-1       . JE0001     0   130   564    22    40  0.50   135
+ME11X2 ME11-generic-2       . JE0002    60   130   588    22    40  0.50   135
+ME11X3 ME11-generic-3       . JE0003    60   130   612    22    40  0.50   135
+ME11X4 ME11-generic-4       . JE0004    60   130   636    22    40  0.50   135
+ME11X5 ME11-generic-5       . JE0005    60   130   661    22    40  0.50   135
+!
+ME12X0 ME12-generic-0       . JE0001    50   110   540    22    40  0.50   135
+ME12X1 ME12-generic-1       . JE0001    55   110   564    22    40  0.50   135
+ME12X2 ME12-generic-2       . JE0002    60   110   588    22    40  0.50   135
+ME12X3 ME12-generic-3       . JE0003    60   110   612    22    40  0.50   135
+ME12X4 ME12-generic-4       . JE0004    60   110   636    22    40  0.50   135
+ME12X5 ME12-generic-5       . JE0005    60   110   661    22    40  0.50   135
+!
 
 !!!!!!!!! MEGA ENVIRONMENT 1 !!!!!
 ! Seri 82 Base Cultivar
