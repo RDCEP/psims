@@ -163,7 +163,6 @@ plots=${plots:-"true"}
 # Set defaults
 scen_years=${scen_years:-$num_years}
 lon_delta=${lon_delta:-$delta}
-tappopt=${tappopt:-"no_optimizer.py -e experiment.json"}
 
 # Compute campaign scenarios as scens * num_years / scen_years
 cscens=$(($scens*$scen_years/$num_years))
@@ -222,22 +221,15 @@ run_command "$tappwth -i 1.psims.nc"
 # Create parts directory
 mkdir -p $(dirname $part_out)
 
-term=false
-while [ $term = false ]; do
-   # Generate input file(s) from experiment json file
-   run_command "$tappinp --latidx $latidx --lonidx $lonidx --delta $sim_lat_delta,$sim_lon_delta"
+# Generate input file(s) from experiment json file
+run_command "$tappinp --latidx $latidx --lonidx $lonidx --delta $sim_lat_delta,$sim_lon_delta"
 
-   # Run impact model
-   run_model "$model" "$executable" "$rundir"
+# Run impact model
+run_model "$model" "$executable" "$rundir"
 
-   # Extract data from output files into psims file with all variables
-   run_command "$postprocess --latidx $latidx --lonidx $lonidx --ref_year $ref_year --delta $sim_lat_delta,$sim_lon_delta \
-                             -y $num_years -s $cscens -v $variables -u $var_units --output $part_out"
-
-   # Run optimizer
-   run_command_redirect OPT.OUT "$tappopt -p $part_out"
-   term=$(cat OPT.OUT)
-done
+# Extract data from output files into psims file with all variables
+run_command "$postprocess --latidx $latidx --lonidx $lonidx --ref_year $ref_year --delta $sim_lat_delta,$sim_lon_delta \
+                          -y $num_years -s $cscens -v $variables -u $var_units --output $part_out"
 
 # Tar and compress output
 mkdir -p output
