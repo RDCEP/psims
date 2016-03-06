@@ -23,16 +23,16 @@ You need these packages installed to run pSIMS:
 
 Package                  | Location                                       | Type 
 -------                  | --------                                       | ----
-APSIM                    | http://www.apsim.info/                         | Crop model
+APSIM                    | https://www.apsim.info                         | Crop model
 Boost                    | http://www.boost.org                           | Required to run APSIM
-CenW                     | http://www.kirschbaum.id.au/Welcome\_Page.htm  | Generic forestry model
+CenW                     | http://www.kirschbaum.id.au/Welcome_Page.htm   | Generic forestry model
 DSSAT                    | http://dssat.net                               | Crop model
 Mono                     | http://www.mono-project.com                    | Required to run APSIM
 nco                      | http://nco.sourceforge.net                     | Required for postprocessing 
-netcdf4                  | http://www.unidata.ucar.edu/software/netcdf    | Required 
-netcdf4 python libraries | http://code.google.com/p/netcdf4-python        | Required
+netcdf4                  | https://www.unidata.ucar.edu/software/netcdf/  | Required 
+netcdf4 python libraries | https://github.com/Unidata/netcdf4-python      | Required
 Oracle Java 7            | http://www.oracle.com/us/downloads/index.html  | Required
-Swift 0.95               | http://swiftlang.org                           | Required
+Swift 0.95               | http://swift-lang.org                          | Required
 
 Compiling the DSSAT Model
 =========================
@@ -250,7 +250,8 @@ the intermediate programs involved. From within the runNNN directory, you may ru
 
 Running on the Midway cluster
 =============================
-Midway is a cluster at the University of Chicago. More information about Midway can be found at http://rcc.uchicago.edu/resources/midway\_specs.html.
+Midway is a cluster at the University of Chicago. More information about Midway can be found at 
+https://rcc.uchicago.edu/docs/.
 
 To run pSIMS on midway, the first thing you need to do is load the required modules.
 
