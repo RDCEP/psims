@@ -1,0 +1,7 @@
+PRELOADER_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PSIMS_ROOT="$( cd "$( dirname $PRELOADER_ROOT/../../.. )" && pwd)"
+ACTIVATE=$PSIMS_ROOT/pysims/venv/bin/activate
+
+if [ -f "$ACTIVATE" ]; then
+    source $ACTIVATE
+fi

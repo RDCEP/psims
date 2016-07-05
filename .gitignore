@@ -1,0 +1,8 @@
+*.pyc
+bin/DSCSM046.EXE
+bin/MODEL.ERR
+campaigns
+data
+outputs
+pysims/test*/
+run*

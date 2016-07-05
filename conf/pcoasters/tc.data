@@ -1,0 +1,5 @@
+persistent-coasters pysims /project/joshuaelliott/psims-python/pysims/pysims.py null null null
+persistent-coasters findLats /project/joshuaelliott/psims-python/bin/findLats.sh null null null
+persistent-coasters combinelon /project/joshuaelliott/psims-python/pysims/combinelon.py null null null
+persistent-coasters combinelat /project/joshuaelliott/psims-python/pysims/combinelat.py null null null
+persistent-coasters aggregate /project/joshuaelliott/psims-python/pysims/aggregate.py null null null

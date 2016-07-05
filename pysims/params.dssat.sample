@@ -1,0 +1,73 @@
+model:       dssat
+weather:     /project/joshuaelliott/testing/pysims/clim
+soils:       /project/joshuaelliott/testing/pysims/soils
+campaign:    /project/joshuaelliott/testing/pysims/campaign
+refdata:     /project/joshuaelliott/psims-python/campaigns/pdssat/common46
+out_file:    sample-output
+executable:  "/scratch/midway/davidkelly999/dssat-csm/DSCSM046.EXE A X1234567.SNX"
+outtypes:    .WTH,.SNX,.SOL,.OUT,.json,.txt,hist.nc4
+
+ref_year:    1980
+num_years:   30
+scen_years:  30
+scens:       8
+
+delta:       "5,5"
+tdelta:      "120,120"
+
+num_lats:    360
+num_lons:    720
+lat_zero:    90
+lon_zero:    -180
+irr_flag:    false
+irr_1st:     true
+
+# Variables to extract
+variables:   PDAT,ADAT,MDAT,HWAM,IRCM,TMAXA,TMINA,PRCP,CO2A,SRADA
+var_units:   "DOY,Days,Days,kg/ha,mm,K,K,mm,ppm,W/m2"
+long_names:  "Planting,Anthesis,Maturity,Yield,Irrigation,MaxTemp,MinTemp,Precip,CO2,SolarRad"
+
+# Campaign translator
+tappcmp:
+    class:         camp2json
+    campaignfile:  Campaign.nc4
+    expfile:       exp_template.json
+    outputfile:    experiment.json
+    y2k:           True
+
+# Input translator
+tappinp:
+    class:   dssat.jsons2dssat
+    Xfile:   X1234567.SNX
+    sfile:   1.soil.nc4
+    efile:   experiment.json
+    SOLfile: SOIL.SOL
+    pfcn:    True
+    CULfile: MZCER046.CUL
+    ECOfile: MZCER046.ECO
+    version: 4.6
+    y2k:     True
+
+# Weather translator
+tappwth:
+    class: dssat.psims2wth
+    outputfile: GENERIC1.WTH
+    variables: tasmin,tasmax,rsds,pr
+
+# Postprocess translator
+postprocess:
+    class: dssat.out2psims
+    inputfile: Summary.OUT
+
+tapptilewth:
+    class:     tile_translator
+
+tapptilesoil:
+    class:     tile_translator_soil
+
+checker:
+    class: SimpleChecker
+    simgfile: /project/joshuaelliott/testing/pysims/masks/maize.mask.0.01.nc4
+
+tappnooutput:
+    class: nooutput2psims

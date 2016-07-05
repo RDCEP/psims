@@ -1,0 +1,257 @@
+#!/bin/bash
+#
+# Usage: psims -s <sitename> -p <paramfile> -c <campaign> -t <tilelist>
+
+# crash: Report a problem and exit
+crash() {
+    echo "$@" >&2
+    exit 1
+}
+
+# Usage: crash and report usage
+usage() {
+   crash "Usage: $0 -s <sitename> -p <paramfile> -c <campaign> -t <tilelist> [-split <splits>]"
+}
+
+# Find absolute path
+abspath() {
+   readlink -f $1
+}
+
+# Verify an argument is not null
+verify_not_null() {
+   argname=$1; shift
+   if [ _$1 != _ ]; then
+      return 0;
+   else
+      echo Error: $argname undefined
+      usage
+   fi
+}
+
+# Create a resume script
+generate_resume() {
+   resume_script=$1
+   swift_script=$2
+   site=$3
+   pcoasters=$4
+   rlog='$( ls -1t '$( basename $swift_script .swift )'*.rlog | head -1 )'
+   shift 4
+   if [ "$pcoasters" == "true" ]; then
+       echo "swift -sites.file sites.xml -tc.file tc.data -resume $rlog $swift_script $@ 2>&1 | tee -a swift.out" >> $resume_script
+   else
+       echo "swift -site $site -resume $rlog $swift_script $@ 2>&1 | tee -a swift.out" >> $resume_script
+   fi
+   echo "echo | tee -a swift.out" >> $resume_script
+   chmod +x $resume_script
+}
+
+# Create a rerun script
+generate_rerun() {
+   rerun_script=$1
+   swift_script=$2
+   site=$3
+   pcoasters=$4
+   shift 4
+   if [ "$pcoasters" == "true" ]; then
+      echo "swift -sites.file sites.xml -tc.file tc.data $swift_script $@ 2>&1 | tee -a swift.out" >> $rerun_script
+   else
+      echo "swift -site $site $swift_script $@ 2>&1 | tee -a swift.out" >> $rerun_script
+   fi
+   echo "echo | tee -a swift.out" >> $rerun_script
+   chmod +x $rerun_script
+}
+
+# Process command line arguments
+while [ $# -gt 0 ]; do
+  case $1 in
+    -c) campaign=$2; shift 2;;
+    -debug) debug='true'; shift;;
+    -t) tilelist=$2; shift 2;;
+    -p) paramfile=$2; shift 2;;
+    -pcoasters) pcoasters='true'; shift;;
+    -r) rundir=$2; shift 2;;
+    -s) export site=$2; shift 2;;
+    -split) split=$2; shift 2;;
+    *) usage;;
+  esac
+done
+
+# Required arguments
+verify_not_null campaign $campaign
+verify_not_null tilelist $tilelist
+verify_not_null paramfile $paramfile
+verify_not_null site $site
+
+if [ -z "$debug" ]; then
+   debug=false
+fi
+
+if [ -z "$split" ]; then
+    split=1
+fi
+
+if [ -z "$pcoasters" ]; then
+    pcoasters='false'
+fi
+
+# Verify test result directory exists
+if [ -n "$test_result" ]; then
+   if [ ! -d "$test_result" ]; then
+      crash "Unable to find test result directory $test_result"
+   fi
+fi
+
+# Verify paramfile exists
+paramfile=$( abspath $paramfile )
+if [ ! -f $paramfile ]; then
+   crash "Could not find parameter file $paramfile in params!"
+fi
+
+has_tabs=$( grep -n -P "\t" $paramfile )
+if [ -n "$has_tabs" ]; then
+    echo "Badly formatted paramfile $paramfile contains tabs"
+    crash "Line $has_tabs"
+fi
+
+# Verify campaign directory exists
+campaign=$( abspath $campaign )
+if [ ! -d "$campaign" ]; then
+   crash "Campaign directory $campaign does not exist!"
+fi
+
+# Verify tilelist exists
+tilelist=$( abspath $tilelist )
+if [ ! -f "$tilelist" ]; then
+   crash "tilelist file does not exist!"
+fi
+
+# Create next unique run id and run directory
+PSIMS_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ -n "$rundir" ]; then
+    if [ -d "$rundir" ]; then
+	export rundir=$( abspath $( echo ${rundir}??? | sed -e 's@^.*'"$rundir"'@@' | awk '{ printf("'"$rundir"'%03d\n", $1+1)}' ))
+    else
+        export rundir=$( abspath $rundir )
+    fi
+else
+    export rundir=$( abspath $( echo run??? | sed -e 's/^.*run//' | awk '{ printf("run%03d\n", $1+1)}' ))
+fi
+mkdir -p $rundir || crash "Unable to create run directory"
+workdir=$rundir
+
+# Check for the existance of a site-specific preload script
+preload="$PSIMS_ROOT/conf/preloads/$site"
+if [ -f "$preload" ]; then
+    source $preload
+fi
+
+# Verify Swift is in path
+command -v swift >/dev/null 2>&1 || crash "Swift command is not available in PATH"
+
+export SWIFT_HEAP_MAX=5120M
+export SWIFT_USERHOME=$rundir
+export num_chunks=$( grep -i numchunks: $paramfile | awk '{print $2}' )
+export variables=$( grep -i ^variables: $paramfile | awk '{print $2}' )
+export cal_vars=$( grep -i ^cal_vars: $paramfile | awk '{print $2}' )
+
+if [ -z "$num_chunks" ]; then
+   export num_chunks=1
+fi
+
+# Check for work_directory location
+if [ -n "$work_directory" ]; then
+   workdir="$( abspath $work_directory )/$( basename $rundir )"
+   if [ -d "$workdir" ]; then
+      crash "Work directory $workdir already exists"
+   fi
+   mkdir -p $workdir
+   cp $rundir/params.psims $workdir
+fi
+
+# Copy required files to the work_directory
+mkdir $workdir/campaign
+mkdir $workdir/outputs
+cp $tilelist $workdir/tileList.txt
+cp $PSIMS_ROOT/psims.swift $workdir
+cp $PSIMS_ROOT/psims-all.swift $workdir
+cp $PSIMS_ROOT/combinelon.swift $workdir
+cp $PSIMS_ROOT/combinelat.swift $workdir
+cp $PSIMS_ROOT/aggregate.swift $workdir
+cp $PSIMS_ROOT/conf/swift.properties $workdir
+cp $paramfile $workdir/params.psims
+cp -r $campaign/* $workdir/campaign
+export campaign_source=$campaign
+export campaign=$workdir/campaign
+chmod a+rw $workdir/*
+
+cd $workdir
+
+# Pcoasters
+if [ "$pcoasters" == "true" ]; then
+    cp $PSIMS_ROOT/conf/pcoasters/* .
+    echo ${site}-template > gensites.template
+    start-coaster-service
+fi
+
+# Run sanity test
+first_tile=$( head -1 $tilelist )
+tlatidx=$( echo $first_tile | cut -d'/' -f1 )
+tlonidx=$( echo $first_tile | cut -d'/' -f2 )
+$PSIMS_ROOT/pysims/sanity.py --campaign $campaign --params $workdir/params.psims --tlatidx $tlatidx --tlonidx $tlonidx
+sanity=$?
+if [ $sanity -ne 0 ]; then
+    rm -rf $workdir
+    echo
+    exit 1
+fi
+echo
+
+# Record arguments in ABOUT file
+cat << EOF > ABOUT
+Site            = $site
+Parameter       = $( abspath $paramfile )
+Tilelist        = $( abspath $tilelist )
+Campaign        = $campaign_source
+Split           = $split
+Run directory   = $rundir
+Work directory  = $workdir
+Pcoasters       = $pcoasters
+EOF
+
+# Echo parameters
+cat ABOUT
+echo
+
+arguments="-campaign=$campaign -param=$workdir/params.psims -cwd=$PWD -num_chunks=$num_chunks -variables=$variables -cal_vars=$cal_vars -split=$split"
+
+# Resume scripts
+generate_resume resume.parts.sh psims.swift $site $pcoasters $arguments
+generate_resume resume.combinelon.sh combinelon.swift $site $pcoasters $arguments
+generate_resume resume.combinelat.sh combinelat.swift $site $pcoasters $arguments
+generate_resume resume.aggregate.sh aggregate.swift $site $pcoasters $arguments
+generate_resume resume.psims-all.sh psims-all.swift $site $pcoasters $arguments
+
+# Rerun scripts
+generate_rerun rerun.parts.sh psims.swift $site $pcoasters $arguments
+generate_rerun rerun.combinelon.sh combinelon.swift $site $pcoasters $arguments
+generate_rerun rerun.combinelat.sh combinelat.swift $site $pcoasters $arguments
+generate_rerun rerun.aggregate.sh aggregate.swift $site $pcoasters $arguments
+generate_rerun rerun.psims-all.sh psims-all.swift $site $pcoasters $arguments
+
+# Run Swift scripts
+./rerun.psims-all.sh
+
+# End pcoasters workers if needed
+if [ "$pcoasters" == "true" ] && [ -x "./workers-${site}.stop" ]; then
+    ./workers-${site}.stop
+fi
+
+# Run combine agg
+has_aggregator=$( grep -i aggregator: params.psims )
+if [ -n "$has_aggregator" ]; then
+    echo Running combineagg . . .
+    $PSIMS_ROOT/pysims/combineagg.sh params.psims
+fi
+
+echo Done

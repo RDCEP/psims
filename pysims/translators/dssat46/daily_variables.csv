@@ -1,0 +1,252 @@
+variable,long_name,units,filename,crop
+SRAA,Average solar radiation,MJ/m2/day,ET.OUT,"maize,wwheat,soy"
+TMAXA,Average maximum air temperature,c,ET.OUT,"maize,wwheat,soy"
+TMINA,Average minimum air temperature,c,ET.OUT,"maize,wwheat,soy"
+EOAA,Average potential evapotranspiration,mm/day,ET.OUT,"maize,wwheat,soy"
+EOPA,Average potential transpiration,mm/day,ET.OUT,"maize,wwheat,soy"
+EOSA,Average potential soil evaporation per day,mm/day,ET.OUT,"maize,wwheat,soy"
+ETAA,Average evapotranspiration,mm/day,ET.OUT,"maize,wwheat,soy"
+EPAA,Average plant transpiration,mm/day,ET.OUT,"maize,wwheat,soy"
+ESAA,Average soil evaporation,mm/day,ET.OUT,"maize,wwheat,soy"
+EFAA,Average flood evaporation,mm/day,ET.OUT,"maize,wwheat,soy"
+EMAA,Average mulch evaporation,mm/day,ET.OUT,"maize,wwheat,soy"
+EOAC,Cumulative potential evapotranspiration,mm,ET.OUT,"maize,wwheat,soy"
+ETAC,Cumulative evapotranspiration,mm,ET.OUT,"maize,wwheat,soy"
+EPAC,Cumulative transpiration,mm,ET.OUT,"maize,wwheat,soy"
+ESAC,Cumulative soil evaporation,mm,ET.OUT,"maize,wwheat,soy"
+EFAC,Cumulative floodwater evaporation,mm,ET.OUT,"maize,wwheat,soy"
+EMAC,Cumulative mulch evaporation,mm,ET.OUT,"maize,wwheat,soy"
+ES1D,Soil evaporation layer 1,mm/day,ET.OUT,"maize,wwheat,soy"
+ES2D,Soil evaporation layer 2,mm/day,ET.OUT,"maize,wwheat,soy"
+ES3D,Soil evaporation layer 3,mm/day,ET.OUT,"maize,wwheat,soy"
+ES4D,Soil evaporation layer 4,mm/day,ET.OUT,"maize,wwheat,soy"
+ES5D,Soil evaporation layer 5,mm/day,ET.OUT,"maize,wwheat,soy"
+ES6D,Soil evaporation layer 6,mm/day,ET.OUT,"maize,wwheat,soy"
+ES7D,Soil evaporation layer 7,mm/day,ET.OUT,"maize,wwheat,soy"
+ES8D,Soil evaporation layer 8,mm/day,ET.OUT,"maize,wwheat,soy"
+ES9D,Soil evaporation layer 9,mm/day,ET.OUT,"maize,wwheat,soy"
+ES10,Soil evaporation layer 10,mm/day,ET.OUT,"maize,wwheat,soy"
+MCFD,Fraction of soil covered by mulch,percent,Mulch.OUT,"maize,wwheat,soy"
+MDEPD,Thickness of mulch layer,cm,Mulch.OUT,"maize,wwheat,soy"
+MWAD,Mass of mulch layer,kg/ha,Mulch.OUT,"maize,wwheat,soy"
+MWTD,Water stored in mulch layer,mm,Mulch.OUT,"maize,wwheat,soy"
+L#SD,Leaf number per stem,count,PlantGro.OUT,"maize,wwheat,soy"
+LAID,Leaf area index,count,PlantGro.OUT,"maize,wwheat,soy"
+LWAD,Leaf appearance rate,count/day,PlantGro.OUT,"maize,wwheat,soy"
+SWAD,Stem weight,kg/ha,PlantGro.OUT,"maize,wwheat,soy"
+GWAD,Grain weight,kg/ha,PlantGro.OUT,"maize,soy"
+RWAD,Root weight,kg/ha,PlantGro.OUT,"maize,wwheat,soy"
+NWAD,Nodule weight,kg/ha,PlantGro.OUT,soy
+VWAD,Vegetative weight (stem+leaf),kg/ha,PlantGro.OUT,"maize,soy"
+CWAD,Tops weight,kg/ha,PlantGro.OUT,"maize,wwheat,soy"
+G#AD,Grain number,count/m2,PlantGro.OUT,"maize,soy"
+GWGD,Unit grain weight,mg,PlantGro.OUT,"maize,soy"
+HIAD,Harvest index,count,PlantGro.OUT,"maize,wwheat,soy"
+PWAD,Pod weight,kg/ha,PlantGro.OUT,"maize,soy"
+P#AD,Pod number,count/m2,PlantGro.OUT,"maize,soy"
+WSPD,Water stress - photosynthesis (0-1),count,PlantGro.OUT,"maize,soy"
+WSGD,Water stress - expansion/partioning/development (0-1),count,PlantGro.OUT,"maize,soy"
+NSTD,Nitrogen stress factor (0-1),count,PlantGro.OUT,"maize,soy"
+EWSD,Excess Water Stress - (0-1),count,PlantGro.OUT,"maize,soy"
+PST1A,P stress factor for reducing photosynthate (0-1),count,PlantGro.OUT,"maize,soy"
+PST2A,P stress which affects vegetative growth (0-1),count,PlantGro.OUT,"maize,soy"
+KSTD,Potassium stress factor (0-1),count,PlantGro.OUT,"maize,soy"
+LNPD,Leaf nitrogen concentration,percent,PlantGro.OUT,"maize,soy"
+SHPD,Shelling % (seed wt/pod wt*100),percent,PlantGro.OUT,"maize,soy"
+HIPD,Pod harvest index (pod/top),count,PlantGro.OUT,"maize,soy"
+PWDD,Detached pod mass,kg/ha,PlantGro.OUT,"maize,soy"
+PWTD,Total pod weight,kg/ha,PlantGro.OUT,"maize,soy"
+SLAD,Specific leaf area,cm2/g,PlantGro.OUT,"maize,wwheat,soy"
+CHTD,Canopy height,m,PlantGro.OUT,"maize,soy"
+CWID,Canopy width (for 1 row),m,PlantGro.OUT,"maize,soy"
+RDPD,Root depth,m,PlantGro.OUT,"maize,wwheat,soy"
+RL1D,Root density soil layer 1,cm/cm3,PlantGro.OUT,"maize,soy"
+RL2D,Root density soil layer 2,cm/cm3,PlantGro.OUT,"maize,soy"
+RL3D,Root density soil layer 3,cm/cm3,PlantGro.OUT,"maize,soy"
+RL4D,Root density soil layer 4,cm/cm3,PlantGro.OUT,"maize,soy"
+RL5D,Root density soil layer 5,cm/cm3,PlantGro.OUT,"maize,soy"
+RL6D,Root density soil layer 6,cm/cm3,PlantGro.OUT,"maize,soy"
+RL7D,Root density soil layer 7,cm/cm3,PlantGro.OUT,"maize,soy"
+RL8D,Root density soil layer 8,cm/cm3,PlantGro.OUT,"maize,soy"
+RL9D,Root density soil layer 9,cm/cm3,PlantGro.OUT,"maize,soy"
+RL10D,Root density soil layer 10,cm/cm3,PlantGro.OUT,"maize,soy"
+CDAD,Dead canopy weight,kg/ha,PlantGro.OUT,maize
+LDAD,Dead leaf weight,kg/ha,PlantGro.OUT,maize
+SDAD,Dead stem weight,kg/ha,PlantGro.OUT,maize
+SNW0C,Cumulative senesced dry matter to surface,kg/ha,PlantGro.OUT,"maize,soy"
+SNW1C,Cumulative senesced dry matter to soil,kg/ha,PlantGro.OUT,"maize,soy"
+DTTD,Growing degree days,count,PlantGro.OUT,maize
+TMEAN,Mean temperature,c,PlantGro.OUT,wwheat
+TKILL,Temperature for plant death,c,PlantGro.OUT,wwheat
+GSTD,Growth stage,count,PlantGro.OUT,"maize,wwheat,soy"
+PARID,PAR interception (%),percent,PlantGro.OUT,wwheat
+PARUD,PAR utilization efficiency,g/MJ,PlantGro.OUT,wwheat
+AWAD,Assimilate production,kg/ha/d,PlantGro.OUT,wwheat
+SAID,Stem area index,m2/m2,PlantGro.OUT,wwheat
+CAID,Canopy area index (Laminae+sheaths+stems+ear+??) ,count,PlantGro.OUT,wwheat
+TWAD,Tops+roots+storage wt,kg/ha,PlantGro.OUT,wwheat
+SDWAD,Seed (ie.what sown) weight,kg/ha,PlantGro.OUT,wwheat
+HWAD,Mass of vegetative tissue (leaf and stem),kg/ha,PlantGro.OUT,wwheat
+CHWAD,Chaff weight,kg/ha,PlantGro.OUT,wwheat
+EWAD,Ear (grain+chaff) or eye weight,kg/ha,PlantGro.OUT,wwheat
+RSWAD,Reserves weight,kg/ha,PlantGro.OUT,wwheat
+SNWPD,Dead material retained on plant,kg/ha,PlantGro.OUT,wwheat
+SNWLD,Senesced OM added to surface,kg/ha,PlantGro.OUT,wwheat
+SNWSD,Senesced OM added to soil,kg/ha,PlantGro.OUT,wwheat
+RSPD,Reserves concentration,percent,PlantGro.OUT,wwheat
+H#AD,Number,count/m2,PlantGro.OUT,wwheat
+HWUD,Harvest wt,count,PlantGro.OUT,wwheat
+T#AD,Tiller number,count/m2,PlantGro.OUT,wwheat
+PTFD,Partition fraction of assimilates to shoot,count,PlantGro.OUT,wwheat
+WAVRD,Water available to demand ratio,count,PlantGro.OUT,wwheat
+WUPRD,Water uptake to demand ratio,count,PlantGro.OUT,wwheat
+WFTD,Water factor for transpiration,count,PlantGro.OUT,wwheat
+WFPD,Water factor for photosynthesis,count,PlantGro.OUT,wwheat
+WFGD,Water factor for growth,count,PlantGro.OUT,wwheat
+NFTD,N factor for tillering (0-1),count,PlantGro.OUT,wwheat
+NFPD,N factor for photosynthesis (0-1),count,PlantGro.OUT,wwheat
+NFGD,N factor for leaf growth (0-1),count,PlantGro.OUT,wwheat
+NUPRD,N uptake to demand ratio,count,PlantGro.OUT,wwheat
+TFPD,Temperature factor for photosynthesis (0-1) ,count,PlantGro.OUT,wwheat
+TFGD,Temperature factor for leaf growth (0-1),count,PlantGro.OUT,wwheat
+VRNFD,Vernalization factor (0-1),count,PlantGro.OUT,wwheat
+DYLFD,Daylength factor for development (0-1),count,PlantGro.OUT,wwheat
+SHND,Shell N concentration,percent,PlantN.OUT,soy
+NFXC,N Fixed,kg/ha,PlantN.OUT,soy
+NFXD,N fixation rate,kg/ha,PlantN.OUT,soy
+CNAD,Tops N,kg/ha,PlantN.OUT,"maize,soy"
+GNAD,Grain N,kg/ha,PlantN.OUT,"maize,soy"
+VNAD,Veg (stem+leaf) N,kg/ha,PlantN.OUT,"maize,soy"
+GNPD,Grain N concentration,percent,PlantN.OUT,"maize,soy"
+VNPD,Veg (stem+leaf) N concentration,percent,PlantN.OUT,"maize,soy"
+NUPC,N uptake,kg/ha,PlantN.OUT,"maize,soy"
+LNAD,Leaf N,kg/ha,PlantN.OUT,"maize,soy"
+SNAD,Stem N,kg/ha,PlantN.OUT,"maize,soy"
+LNPD,Leaf nitrogen concentration,percent,PlantN.OUT,"maize,soy"
+SNPD,Stem N concentration,percent,PlantN.OUT,"maize,soy"
+RNPD,Root N concentration,percent,PlantN.OUT,"maize,wwheat,soy"
+SNN0C,Cumulative senesced N to surface,kg/ha,PlantN.OUT,"maize,soy"
+SNN1C,Cumulative senesced N to soil,kg/ha,PlantN.OUT,"maize,soy"
+NUAD,N uptake,kg/ha,PlantN.OUT,wwheat
+TNAD,Tops (ie canopy) N,kg/ha,PlantN.OUT,wwheat
+SDNAD,Seed (ie.what sown) N,kg/ha,PlantN.OUT,wwheat
+RNAD,Root N ,kg/ha,PlantN.OUT,wwheat
+HNAD,"Harvest product (eg.,grain,storage root) N",kg/ha,PlantN.OUT,wwheat
+HIND,Harvest index fo N (grain [N]/tops [N]) ,count,PlantN.OUT,wwheat
+RSNAD,Reserve N,kg/ha,PlantN.OUT,wwheat
+SNNPD,N in dead material retained on plant,kg/ha,PlantN.OUT,wwheat
+SNN0D,Senesced N to surface,kg/ha,PlantN.OUT,wwheat
+SNN1D,Senesced N to soil,kg/ha,PlantN.OUT,wwheat
+HNPD,"Harvest product (eg.,grain,storage root) N conc",percent,PlantN.OUT,wwheat
+SDNPD,Seed (ie.what sown) N concentration,percent,PlantN.OUT,wwheat
+LNPRD,Leaf tissue relative (to critical) N conc.,percent,PlantN.OUT,wwheat
+SNPRD,Shoot tissue relative (to critical) N conc.,percent,PlantN.OUT,wwheat
+RNPRD,Root tissue relative (to critical) N conc.,percent,PlantN.OUT,wwheat
+VCNP,Vegetative critical N conc,percent,PlantN.OUT,wwheat
+VMNP,Vegetative minimum N conc,percent,PlantN.OUT,wwheat
+NDEMD,N demand,kg/ha,PlantN.OUT,wwheat
+NAPC,Inorganic N applied,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NI#M,N applications,count,SoilNi.OUT,"maize,wwheat,soy"
+NLCC,N leached,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NIAD,Total soil NO3+NH4,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NITD,Total soil NO3,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NHTD,Total soil NH4,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NI1D,NO3 soil layer 1 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI2D,NO3 soil layer 2 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI3D,NO3 soil layer 3 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI4D,NO3 soil layer 4 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI5D,NO3 soil layer 5 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI6D,NO3 soil layer 6 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI7D,NO3 soil layer 7 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI8D,NO3 soil layer 8 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI9D,NO3 soil layer 9 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NI10,NO3 soil layer 10 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH1D,NH4 soil layer 1 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH2D,NH4 soil layer 2 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH3D,NH4 soil layer 3 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH4D,NH4 soil layer 4 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH5D,NH4 soil layer 5 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH6D,NH4 soil layer 6 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH7D,NH4 soil layer 7 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH8D,NH4 soil layer 8 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH9D,NH4 soil layer 9 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NH10,NH4 soil layer 10 (ug [N]/g [soil]),count,SoilNi.OUT,"maize,wwheat,soy"
+NMNC,Cumulative N mineralization,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NITC,Cumulative nitrification,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NDNC,Cumulative denitrification,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NIMC,Cumulative N immobilization,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+AMLC,Cumulative ammonia volatilization,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+NNMNC,Cumulative net N mineralization (miner - immob),count,SoilNi.OUT,"maize,wwheat,soy"
+NUCM,N uptake during season,kg/ha,SoilNi.OUT,"maize,wwheat,soy"
+OMAC,Cumulative organic matter applied,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SCDD,Stable soil org. C @ user depth,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SOCD,Soil plus surface organic carbon,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SC0D,Organic C on surface,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SCTD,Total soil organic carbon,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SOMCT,C in stable organic matter in soil profile,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+LCTD,Total soil litter carbon,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+ONAC,Cumulative N in applied organic matter,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SNDD,Stable soil org. N @ user depth,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SOND,Soil plus surface organic nitrogen,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SN0D,Organic N on surface,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SNTD,Soil organic N,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SOMNT,N in stable organic matter in soil profile,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+LNTD,Total soil litter N,kg/ha,SoilOrg.OUT,"maize,wwheat,soy"
+SWTD,Total soil water in profile,mm,SoilWat.OUT,"maize,wwheat,soy"
+SWXD,Extractable water,mm,SoilWat.OUT,"maize,wwheat,soy"
+ROFC,Cumulative runoff,mm,SoilWat.OUT,"maize,wwheat,soy"
+DRNC,Cumulative drainage,mm,SoilWat.OUT,"maize,wwheat,soy"
+PREC,Cumulative precipitation,mm,SoilWat.OUT,"maize,wwheat,soy"
+IR#C,Irrigation applications,count,SoilWat.OUT,"maize,wwheat,soy"
+IRRC,Cumulative irrigation,mm,SoilWat.OUT,"maize,wwheat,soy"
+DTWT,Water table depth,cm,SoilWat.OUT,"maize,wwheat,soy"
+MWTD,Water stored in mulch layer,mm,SoilWat.OUT,"maize,wwheat,soy"
+TDFD,Water lost to tile drain,mm/day,SoilWat.OUT,"maize,wwheat,soy"
+TDFC,Cumulative water lost to tile drain,mm,SoilWat.OUT,"maize,wwheat,soy"
+ROFD,Total daily surface runoff,mm/day,SoilWat.OUT,"maize,wwheat,soy"
+SW1D,Soil water soil layer 1,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW2D,Soil water soil layer 2,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW3D,Soil water soil layer 3,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW4D,Soil water soil layer 4,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW5D,Soil water soil layer 5,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW6D,Soil water soil layer 6,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW7D,Soil water soil layer 7,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW8D,Soil water soil layer 8,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW9D,Soil water soil layer 9,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+SW10,Soil water soil layer 10,cm3/cm3,SoilWat.OUT,"maize,wwheat,soy"
+PRED,Precipitation depth,mm/day,Weather.OUT,"maize,wwheat,soy"
+DAYLD,Day length sunrise to sunset,hours,Weather.OUT,"maize,wwheat,soy"
+TWLD,Twilight to twilight day length,hours,Weather.OUT,"maize,wwheat,soy"
+SRAD,Solar radiation,MJ/m2/day,Weather.OUT,"maize,wwheat,soy"
+PARD,Daily PAR or photon flux density,mol/m2/day,Weather.OUT,"maize,wwheat,soy"
+CLDD,Relative cloudiness factor (0-1),count,Weather.OUT,"maize,wwheat,soy"
+TMXD,Maximum daily temperature,c,Weather.OUT,"maize,wwheat,soy"
+TMND,Minimum daily temperature,c,Weather.OUT,"maize,wwheat,soy"
+TAVD,Average daily temperature,c,Weather.OUT,"maize,wwheat,soy"
+TDYD,Average temperature during daylight hours,c,Weather.OUT,"maize,wwheat,soy"
+TDWD,Dewpoint temperature,c,Weather.OUT,"maize,wwheat,soy"
+TGAD,Average daily air temperature for growth,c,Weather.OUT,"maize,wwheat,soy"
+TGRD,Average air temp. daylight hours for growth,c,Weather.OUT,"maize,wwheat,soy"
+WDSD,Wind speed,km/day,Weather.OUT,"maize,wwheat,soy"
+CO2D,Atmospheric CO2 concentration,ppm,Weather.OUT,"maize,wwheat,soy"
+LIPD,Light (PAR) interception,percent,ETPhot.OUT,soy
+PHAD,Gross photosynthesis,g/m2.d,ETPhot.OUT,soy
+PHAN,Gross photosynthesis noon,mg/m2.s,ETPhot.OUT,soy
+LIPN,Noon light (PAR) interception,percent,ETPhot.OUT,soy
+SLLN,SLW in sunlit leaves noon,mg/cm2,ETPhot.OUT,soy
+SLHN,SLW in shaded leaves noon,mg/cm2,ETPhot.OUT,soy
+NPLN,Noon N sunlit leaves,percent,ETPhot.OUT,soy
+NPHN,Noon N shaded leaves,percent,ETPhot.OUT,soy
+LMLN,Noon Pmax sunlit leaves,mg/m2,ETPhot.OUT,soy
+LMHN,Noon Pmax shaded leaves,mg/m2,ETPhot.OUT,soy
+TGNN,Noon canopy temperature,c,ETPhot.OUT,soy
+TGAV,Daily average canopy temp,c,ETPhot.OUT,soy
+CMAD,Carbohydrate mobilization,g/m2,PlantC.OUT,soy
+CGRD,Crop growth rate,g/m2,PlantC.OUT,soy
+GRAD,Growth respiration,g/m2,PlantC.OUT,soy
+MRAD,Maintenance respiration,g/m2,PlantC.OUT,soy
+CHAD,Carbohydrate accumulation,g/m2,PlantC.OUT,soy
+CLPD,Carbohydrate in leaf,percent,PlantC.OUT,soy
+CSPD,Carbohydrate in stem,percent,PlantC.OUT,soy
+GLPD,Grain oil,percent,PlantC.OUT,soy
+GCPD,Seed carbohydrate concentration,percent,PlantC.OUT,soy
