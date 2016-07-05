@@ -65,9 +65,5 @@ tapptilewth:
 tapptilesoil:
     class:     tile_translator_soil
 
-checker:
-    class: SimpleChecker
-    simgfile: /project/joshuaelliott/testing/pysims/masks/maize.mask.0.01.nc4
-
 tappnooutput:
     class: nooutput2psims
