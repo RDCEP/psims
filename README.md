@@ -51,12 +51,11 @@ The -split option may be used to break up the simulation in smaller chunks. For 
 
 The parameter file
 ==================
-The params file contains a set of keys and values defining the parameters of a psims
-run. It is iIt defines things like the number of years to look at, the path name to climate
-input files, and how to name the ouputs. Below is a list of all valid parameters and
-a description of what it does.
+The parameter file is a YAML-formatted file containing all the parameters of a psims
+run. It defines things like the number of simulation years, the path to climate input files,
+and which model to use. Below is a list of parameters and a description of what it does.
 
-Parameter      | Description     
+Parameter      | Description
 ---------      |------------
 agg            | Indicates whether to aggregate (true/false)
 agg\_file      | Mask file for aggregation (only used if agg = true)
@@ -66,7 +65,7 @@ executable     | Name of executable and arguments to run for each grid
 lat\_zero      | Top edge of the North most grid cell in the campaign
 lon\_zero      | Left edge of the West most grid cell in the campaign
 long\_names    | Long names for variables, in same order that variables are listed
-model          | Defines the type of model to run. Valid options are dssat45, dssat46, apsim75      
+model          | Defines the type of model to run. Valid options are dssat45, dssat46, apsim75
 num\_lats      | Number of latitudes to be included in final nc4 file (starting with lat\_zero)
 num\_lons      | Number of longitudes to be included in final nc4 file (starting with lon\_zero)
 num\_years     | Number of years to simulate
