@@ -12,7 +12,7 @@ num_years:   30
 scen_years:  30
 scens:       8
 
-delta:       "5,5"
+delta:       "30,30"
 tdelta:      "120,120"
 
 num_lats:    360
@@ -33,7 +33,6 @@ tappcmp:
     campaignfile:  Campaign.nc4
     expfile:       exp_template.json
     outputfile:    experiment.json
-    y2k:           True
 
 # Input translator
 tappinp:
@@ -46,7 +45,6 @@ tappinp:
     CULfile: MZCER046.CUL
     ECOfile: MZCER046.ECO
     version: 4.6
-    y2k:     True
 
 # Weather translator
 tappwth:
