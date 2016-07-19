@@ -47,7 +47,7 @@ The campaign option defines a directory that contains input file specific to a c
 
 The gridlist is a set of latitude and longitude indexes that should be processed.
 
-The -split option may be used to break up the simulation in smaller chunks. For example, a split of 2 will run a single tile across two different nodes. This can be useful for very dense tiles.
+The -split option may be used to break up the simulation in smaller chunks. For example, a split of 2 will run a single tile across four different nodes. This can be useful for very dense tiles.
 
 The parameter file
 ==================
