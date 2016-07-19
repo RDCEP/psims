@@ -16,10 +16,8 @@ import checkers.checker_factory as checker_factory
 
 # Exit with error if test fails
 def assert_true(passed):
-    check = Fore.GREEN + u'\u2713' + Style.RESET_ALL
-    fail  = Fore.RED + u'\u2718' + Style.RESET_ALL
-    if datetime.datetime.today().weekday() >= 5:
-        fail = u'\U0001F4A9' + " "
+    check = Fore.GREEN + 'o' + Style.RESET_ALL
+    fail  = Fore.RED + 'x' + Style.RESET_ALL
     if passed[0]:
         print check + " " + passed[1]
     else:
