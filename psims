@@ -172,6 +172,7 @@ fi
 # Copy required files to the work_directory
 mkdir $workdir/campaign
 mkdir $workdir/outputs
+mkdir $workdir/scratch
 cp $tilelist $workdir/tileList.txt
 cp $PSIMS_ROOT/psims.swift $workdir
 cp $PSIMS_ROOT/psims-all.swift $workdir
