@@ -15,7 +15,7 @@ Boost                    | http://www.boost.org                           | Requ
 CenW                     | http://www.kirschbaum.id.au/Welcome_Page.htm   | Generic forestry model
 DSSAT                    | http://dssat.net                               | Crop model
 Mono                     | http://www.mono-project.com                    | Required to run APSIM
-nco                      | http://nco.sourceforge.net                     | Required for postprocessing 
+nco 4.4.3                | http://nco.sourceforge.net                     | Required for postprocessing 
 netcdf4                  | https://www.unidata.ucar.edu/software/netcdf/  | Required 
 netcdf4 python libraries | https://github.com/Unidata/netcdf4-python      | Required
 Oracle Java 7            | http://www.oracle.com/us/downloads/index.html  | Required
