@@ -2,6 +2,7 @@
 import argparse
 import collections
 import configuration.configuration
+import dill
 import errno
 import glob
 import multiprocessing
@@ -28,7 +29,8 @@ def run_translator(latidx, lonidx, translator, method='run'):
     return passed
 
 # Process a tile
-def process_tile(latidx, lonidx, translators):
+def process_tile(latidx, lonidx, translators_p):
+    translators = dill.loads(translators_p)
     point_directory = os.path.join('%04d' % latidx, '%04d' % lonidx)
     mkdir_p(point_directory)
     os.chdir(point_directory)
@@ -169,6 +171,7 @@ translators['soil_tile_translator']     = soil_tile_translator
 translators['stage_inputs_translator']  = stage_inputs_translator
 translators['stage_outputs_translator'] = stage_outputs_translator
 translators['weather_translator']       = weather_translator
+translators_p = dill.dumps(translators)
 
 # Simulation deltas
 latdelta, londelta = [double(d) for d in config.get('delta').split(',')]
@@ -206,7 +209,7 @@ else:
             latidx = int((tlatdelta * (tlatidx - 1) + tslatdelta * (slatidx - 1) + latdelta * i) / latdelta)
             lonidx = int((tlondelta * (tlonidx - 1) + tslondelta * (slonidx - 1) + londelta * j) / londelta)
             part_directories.append('%04d/%04d' % (latidx, lonidx))
-            pool.apply_async(process_tile, [latidx, lonidx, translators])
+            pool.apply_async(process_tile, [latidx, lonidx, translators_p])
     pool.close()
     pool.join()
 
