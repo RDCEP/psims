@@ -200,7 +200,7 @@ part_directories = []
 
 # Debug with just a single point
 if args.latidx and args.lonidx:
-    process_tile(args.latidx, args.lonidx, translators)
+    process_tile(args.latidx, args.lonidx, translators_p)
     sys.exit(0)
 # Process all points in the tile in parallel
 else:
