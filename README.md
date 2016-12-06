@@ -57,8 +57,7 @@ and which model to use. Below is a list of parameters and a description of what 
 
 Parameter      | Description
 ---------      |------------
-agg            | Indicates whether to aggregate (true/false)
-agg\_file      | Mask file for aggregation (only used if agg = true)
+aggregator     | Aggregator options, used to average a variable across a region
 checker        | Checker translator and options, check if a tile should be simulated or not
 delta          | Simulation delta, gridcell spacing in arcminutes
 executable     | Name of executable and arguments to run for each grid
@@ -86,7 +85,26 @@ postprocess    | Name of translator and options to run after running executable
 var\_units     | Units to use for each variable, in the same order that variables are listed
 variables      | Define the variables to extract to final outputs
 weather        | Defines the directory where weather data is stored
-weight\_file   | Weight file for aggregation (only used if agg = true)
+
+Aggregation
+======
+The aggregation script is responsible for taking the final output of a psims simulation and computing the average value for a variable across some geographic region. To enable aggregation, add a section named 'aggregator' to your parameters file with the following parameters:
+
+Parameter | Description
+-----     | -----------
+aggfile   | Location of an aggfile. The aggfile contains information about geographic boundries at given lats/lons. Common uses here are gadm regions and food producing units.
+weightfile| Location of the weightfile, used to give certain geographic areas more weight than others
+levels    | Comma separated list of levels from the aggfile (example: gadm0, gadm1, gadm2)
+
+The aggfile and weightfile must match the resolution used in your simulation. To generate a new aggfile you can use the gdal_rasterize utility to convert from a gadm shapefile to a netcdf file, then use bin/create_agg_limits.py to add the required variables and dimensions.
+
+Example parameters:
+~~~
+aggregator:
+    aggfile: /path/to/agg.nc
+    weightfile: /path/to/weight.nc
+    levels: gadm0
+~~~
 
 Obtaining Data
 ==============
