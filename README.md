@@ -93,7 +93,7 @@ When pysims is run, the user must specify a campaign directory with the --campai
 The exp_template.json file contains key-value pairs for data that will be written to the experiment file. These values represent things like fertilizer amounts, irrigation settings, and planting dates. Static settings for the experiment are stored in exp_template.json. Values that vary by lat, lon, scenario, or time get stored in Campaign.nc4.
 
 Here is an example of irrigation definitions in exp_template.json.
-~~
+~~~
   "dssat_simulation_control": {
     "data": [
         "irrigation": {
@@ -105,7 +105,7 @@ Here is an example of irrigation definitions in exp_template.json.
           "iramt": "10",
           "ithrl": "80"
         },...
-~~
+~~~
 
 But users may not want to these irrigation settings everywhere. If they have a collection of irrigation amounts (iramt) that change by location, users may create a variable in Campaign.nc4 called iramt. The most basic version of this would be a NetCDF variable in the format of float iramt(lat, lon). When pysims runs for a given point, the appropriate value would transfer from Campaign.nc4 into the experiment file. If iramt is not defined in Campaign.nc4, the static value from exp_template.json is used instead.
 
@@ -124,12 +124,12 @@ levels    | Comma separated list of levels from the aggfile (example: gadm0, gad
 The aggfile and weightfile must match the resolution used in your simulation. To generate a new aggfile you can use the gdal_rasterize utility to convert from a gadm shapefile to a netcdf file, then use bin/create_agg_limits.py to add the required variables and dimensions.
 
 Example parameters:
-~~
+~~~
 aggregator:
     aggfile: /path/to/agg.nc
     weightfile: /path/to/weight.nc
     levels: gadm0
-~~
+~~~
 
 Obtaining Data
 ==============
