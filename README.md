@@ -8,15 +8,15 @@ Elliott, J., D. Kelly, J. Chryssanthacopoulos, M. Glotter, Kanika Jhunjhnuwala, 
 
 Software Dependencies
 =====================
-Package                  | Location                                       | Type 
+Package                  | Location                                       | Type
 -------                  | --------                                       | ----
 APSIM                    | https://www.apsim.info                         | Crop model
 Boost                    | http://www.boost.org                           | Required to run APSIM
 CenW                     | http://www.kirschbaum.id.au/Welcome_Page.htm   | Generic forestry model
 DSSAT                    | http://dssat.net                               | Crop model
 Mono                     | http://www.mono-project.com                    | Required to run APSIM
-nco 4.4.3                | http://nco.sourceforge.net                     | Required for postprocessing 
-netcdf4                  | https://www.unidata.ucar.edu/software/netcdf/  | Required 
+nco 4.4.3                | http://nco.sourceforge.net                     | Required for postprocessing
+netcdf4                  | https://www.unidata.ucar.edu/software/netcdf/  | Required
 netcdf4 python libraries | https://github.com/Unidata/netcdf4-python      | Required
 Oracle Java 7            | http://www.oracle.com/us/downloads/index.html  | Required
 Swift 0.95               | http://swift-lang.org                          | Required
@@ -29,7 +29,7 @@ Simulating a single tile is useful for testing purposes. It allows you to verify
 
 Usage: `pysims.py --campaign <campaign_dir> --param <param_file> --tlatidx <tile_latitude_index> --tlonidx <tile_longitude_index> [ --latidx <point_latitude_index> --lonidx <point_longitude_index> ]`
 
-If a point latidx and lonidx is specified, only a single point will be simulated rather than all points in the tile. 
+If a point latidx and lonidx is specified, only a single point will be simulated rather than all points in the tile.
 
 Multi-Tile Simulation
 ======================
@@ -37,7 +37,7 @@ In most cases you'll want to simulate a group of tiles. Since this can be comput
 
 Usage: `./psims -s <sitename> -p <paramfile> -c <campaign> -t <tile_list> [ -split n ]`
 
-The sitename option determines where a run will take place. Currently, valid 
+The sitename option determines where a run will take place. Currently, valid
 options are "sandyb", "westmere", and "local". The sandyb and westmere sites are for use on the Midway cluster at the University of Chicago. The "local" site assumes a 12 core machine. This can be tweaked by editing conf/swift.properties.
 
 The params file defines the path to inputs, outputs, the type of model to run, and
@@ -86,8 +86,33 @@ var\_units     | Units to use for each variable, in the same order that variable
 variables      | Define the variables to extract to final outputs
 weather        | Defines the directory where weather data is stored
 
+Campaign Files
+==============
+When pysims is run, the user must specify a campaign directory with the --campaign parameter. Typically this campaign directory contains two relevant files named Campaign.nc4 and exp_template.json. These files are used by the jsons2dssat and jsons2apsim translators to create experiment files for the crop model.
+
+The exp_template.json file contains key-value pairs for data that will be written to the experiment file. These values represent things like fertilizer amounts, irrigation settings, and planting dates. Static settings for the experiment are stored in exp_template.json. Values that vary by lat, lon, scenario, or time get stored in Campaign.nc4.
+
+Here is an example of irrigation definitions in exp_template.json.
+~~
+  "dssat_simulation_control": {
+    "data": [
+        "irrigation": {
+          "ithru": "100",
+          "iroff": "GS000",
+          "imeth": "IR001",
+          "imdep": "40",
+          "ireff": "1.0",
+          "iramt": "10",
+          "ithrl": "80"
+        },...
+~~
+
+But users may not want to these irrigation settings everywhere. If they have a collection of irrigation amounts (iramt) that change by location, users may create a variable in Campaign.nc4 called iramt. The most basic version of this would be a NetCDF variable in the format of float iramt(lat, lon). When pysims runs for a given point, the appropriate value would transfer from Campaign.nc4 into the experiment file. If iramt is not defined in Campaign.nc4, the static value from exp_template.json is used instead.
+
+There may be situations where users want to have multiple irrigation amounts defined in your exp_template.json. In this case having an iramt variable in Campaign.nc4 variable is ambiguous because you're not sure which irrigation amount it corresponds to. In these cases pysims uses a numbering system in the Campaign.nc4 variable names. The variable iramt_1 corresponds to the first instance of iramt in exp_template.json. iramt_2 corresponds to the second instance, and so on. This process works the same for all variables, not just limited to iramt.
+
 Aggregation
-======
+===========
 The aggregation script is responsible for taking the final output of a psims simulation and computing the average value for a variable across some geographic region. To enable aggregation, add a section named 'aggregator' to your parameters file with the following parameters:
 
 Parameter | Description
@@ -99,12 +124,12 @@ levels    | Comma separated list of levels from the aggfile (example: gadm0, gad
 The aggfile and weightfile must match the resolution used in your simulation. To generate a new aggfile you can use the gdal_rasterize utility to convert from a gadm shapefile to a netcdf file, then use bin/create_agg_limits.py to add the required variables and dimensions.
 
 Example parameters:
-~~~
+~~
 aggregator:
     aggfile: /path/to/agg.nc
     weightfile: /path/to/weight.nc
     levels: gadm0
-~~~
+~~
 
 Obtaining Data
 ==============
@@ -144,5 +169,3 @@ There may be times when a psims run fails. Failures may be caused by problems wi
 	$ ./rerun.combinelat.sh   # Rerun all combinelat tasks
 	$ ./resume.aggregate.sh   # Continue aggregation from where a failed run has stopped
 	$ ./rerun.aggregate.sh    # Rerun all aggregation tasks
-	$ ./resume.psims-all.sh   # Continue all psims tasks from a failed run has stopped
-	$ ./rerun.psims-all.sh    # Rerun all psims tasks
