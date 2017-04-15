@@ -43,7 +43,6 @@ class Apsim75(Model):
 
             # Run apsim for each sim file
             for sim in glob.glob('*.sim'):
-                self.log.info('Running ApsimModel.exe %s' % sim)
                 p = Popen('source paths.sh ; Model/ApsimModel.exe %s' % sim, shell=True, executable='/bin/bash', stdout=PIPE, stderr=PIPE)
                 stdout, stderr = p.communicate()
                 stdout_file.write(stdout)
