@@ -1,0 +1,113 @@
+Download pSIMS
+--------------
+To download pSIMS, run the command:
+
+git clone https://github.com/RDCEP/psims.git
+
+Install Required Software Libraries
+-----------------------------------
+There is a README available at https://github.com/RDCEP/psims that contains the
+list of requirements. Please note the version numbers. Different versions of
+libraries may cause issues, especially with nco. The required python modules
+are specified in pysims/requirements.txt. You can install these in a python
+virtual environment with:
+
+pip install -r requirements.txt
+
+Install DSSAT model
+-------------------
+Request access to DSSAT source code from https://github.com/DSSAT and compile
+with the changes required for Linux.
+
+Download Data
+-------------
+1. Download and extract climate dataset from
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/agmerra.tar.gz (19G)
+2. Download and extract soil dataset from
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/gsde.tar.gz (1.8G)
+3. Download and extract campaign dataset from
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/campaign.tar.gz (474K)
+4. Download and extract reference dataset from
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/refdata.tar.gz (124K)
+5. Download and extract tilelists from
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/tilelists.tar.gz (8.8K)
+
+Parameter File
+--------------
+An example parameter file is included that will work with this data. It is
+located in pysims/params.dssat.sample. Edit the file and update the paths to
+weather, soils, refdata, and executable.
+
+Test 1 - Simulate a Single Point
+--------------------------------
+Create an empty scratch directory, and from within that directory run the
+command:
+
+/pathto/psims/pysims/pysims.py --param /pathto/psims/pysims/params.dssat.sample --campaign /pathto/downloaded_data/campaign --tlatidx 0024 --tlonidx 0044 --latidx 0096 --lonidx 0173
+
+When this command runs, you will see a series of steps being performed. The
+output will look something like this:
+
+0024/0044, StageInputsSharedFS, run_tile, 0.257067, True
+0096/0173, Noop, run, 0.000004, True
+0096/0173, StageInputsSharedFS, run, 0.018813, True
+0096/0173, SoilTileTranslator, run, 0.485667, True
+0096/0173, TileTranslator, run, 3.428785, True
+0096/0173, Noop, run, 0.000006, True
+0096/0173, Camp2Json, run, 0.117662, True
+0096/0173, Noop, run, 0.000003, True
+0096/0173, Psims2Wth, run, 0.708426, True
+0096/0173, Jsons2DssatLong, run, 0.107803, True
+0096/0173, Dssat, run, 2.453994, True
+0096/0173, Out2Psims, run, 1.333678, True
+0096/0173, StageOutputsSharedFS, run, 0.000010, True
+
+The last value on each line will be either True or False. If any of these steps
+are False, something is wrong that needs to be corrected before going further.
+You may also see other error messages that give some insight to what's
+happening. It may be a path is incorrect in your params file, or a missing
+library is causing something to fail.
+
+If everything passes here, take a look at outputs/output_0096_0173.psims.nc and
+verify it is populated with data. You can view the file with a tool called
+Panoply (available at https://www.giss.nasa.gov/tools/panoply).
+
+Test 2 - Simulate a Full Tile
+-----------------------------
+The command to simulate a full tile is:
+
+/pathto/psims/pysims/pysims.py --param /pathto/psims/pysims/params.dssat.sample --campaign /pathto/downloaded_data/campaign --tlatidx 0024 --tlonidx 0044
+
+This will use all CPUs available to simulate the points. If you're running this
+command on a cluster, it may be better to run this test on a node rather than
+the shared login node because it will likely max out multiple cores. This
+core-level parallelism is controlled by Python.
+
+Test 3 - Run a Single Tile via Swift
+------------------------------------
+Time to move on to node-level parallelism via Swift. Let’s start with 1 tile.
+Edit the file conf/swift.properties. This file contains information about your
+cluster. The file includes some examples of how to use a cluster with a Slurm
+scheduler.
+
+Within a site definition, you will need to change jobQueue, jobProject, workDir,
+and taskDir. The workDir should be a shared scratch filesystem, and taskDir
+should be the fastest filesystem available (can be non-shared). Depending on the
+cluster, you may also need to tweak walltimes and the maximum job submissions.
+
+To test, run the following command:
+
+./psims -s <sitename> -p <params> -c /pathto/downloaded_data/campaign -t /pathto/downloaded_data/tilelists/tileList.1
+
+The tilelist is a text file that contains every point to be included in the
+simulation. This will simulate 1 tile, and fill in data for the rest of the
+world when it performs the combinelat/combinelon steps. The output will be
+named sample-output.nc4. If you plot this file in panoply you should see
+data in your tile.
+
+Test 4 - Run full simulation via Swift
+--------------------------------------
+To run the full simulation, the only thing you have to change is the tilelist
+you're using. Change the tilelist from tilelist.1 to tilelist.all. Swift will
+spread the workload across multiple nodes (up to the maxJobs value specified in
+conf/swift.properties).
