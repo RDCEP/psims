@@ -30,13 +30,15 @@ Download Data
 4. Download and extract reference dataset from
    http://users.rcc.uchicago.edu/~davidkelly999/psims/refdata.tar.gz (124K)
 5. Download and extract tilelists from
-   http://users.rcc.uchicago.edu/~davidkelly999/psims/tilelists.tar.gz (8.8K)
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/tilelists.tar.gz (8K)
+6. Download and extract masks from
+   http://users.rcc.uchicago.edu/~davidkelly999/psims/masks.tar.gz (12K)
 
 Parameter File
 --------------
 An example parameter file is included that will work with this data. It is
 located in pysims/params.dssat.sample. Edit the file and update the paths to
-weather, soils, refdata, and executable.
+weather, soils, refdata, simplechecker mask, and executable.
 
 Test 1 - Simulate a Single Point
 --------------------------------

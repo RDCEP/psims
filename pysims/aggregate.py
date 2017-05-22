@@ -16,7 +16,7 @@ from numpy.ma import masked_where
 from netCDF4 import Dataset as nc
 from optparse import OptionParser
 from os import remove, makedirs, sep
-from numpy import where, diff, isnan, ceil, double
+from numpy import where, diff, isnan, ceil, double, int32, float64
 from configuration.configuration import YAMLConfiguration
 
 def run_nco(nco_obj, action, input, output, options):
@@ -88,13 +88,43 @@ def is_file(filename):
         return False
 
 def verify_params(config):
-    aggfile    = param.get_dict('aggregator', 'aggfile')
-    weightfile = param.get_dict('aggregator', 'weightfile')
-    if not is_file(aggfile):
-        return False
+    tname = 'aggregator'
+    aggfile = config.get_dict(tname, 'aggfile')
+    weightfile = config.get_dict(tname, 'weightfile')
+    num_lats = config.get('num_lats')
+    num_lons = config.get('num_lons')
+    lat_zero = config.get('lat_zero')
+    lon_zero = config.get('lon_zero')
+    delta = int(config.get('delta').split(',')[0]) / 60.0
+    offset = delta / 2
+
     if not is_file(weightfile):
-        return False
-    return True
+        sys.exit("%s: weightfile %s does not exist" % (tname, weightfile))
+
+    for ncf in [weightfile, aggfile]:
+        if not is_file(ncf):
+            sys.exit("%s: file %s does not exist" % (tname, ncf))
+        f = nc(ncf)
+        if not isinstance(f.variables['lat'][0], float64) or not isinstance(f.variables['lon'][0], float64):
+            sys.exit("%s: %s should have lat/lon dimensions as doubles" % (tname, ncf))
+        if num_lats != len(f.variables['lat']):
+            sys.exit("%s: %s has a different number of lats than simulation" % (tname, ncf))
+        if num_lons != len(f.variables['lon']):
+            sys.exit("%s: %s has a different number of lons than simulation" % (tname, ncf))
+        if (lat_zero - offset - delta) != f.variables['lat'][1]:
+            sys.exit("%s: %s has a different grid spacing than the simulation" % (tname, ncf))
+        if lat_zero - offset != f.variables['lat'][0]:
+            sys.exit("%s: %s starts at a different lat than the simulation" % (tname, ncf))
+        if lon_zero + offset != f.variables['lon'][0]:
+            sys.exit("%s: %s starts at a different lon than the simulation" % (tname, ncf))
+        for v in ['irr', 'time']:
+            if v in f.variables:
+                if not isinstance(f.variables[v][0], int32):
+                    sys.exit("%s: %s %s dimension must be int" % (tname, ncf, v))
+
+    print "%s likes the parameters" % tname
+    sys.exit(0)
+
 
 # parse inputs
 parser = OptionParser()
@@ -123,7 +153,7 @@ region    = options.region
 param     = YAMLConfiguration(paramfile)
 
 if not param.get('aggregator'):
-    exit(0)
+    sys.exit(0)
 
 inputfile  = param.get('out_file')
 weightfile = param.get_dict('aggregator', 'weightfile')
@@ -136,11 +166,7 @@ outputfile = '%s.agg.%s.%04d' % (inputfile, variable, chunk)
 
 # Sanity check
 if options.sanity:
-    passed = verify_params(param)
-    if passed:
-        sys.exit(0)
-    else:
-        sys.exit(1)
+    verify_params(param)
 
 # get lat/lon extents and number of times/scens
 with nc(inputfile) as f:

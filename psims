@@ -199,7 +199,7 @@ fi
 first_tile=$( head -1 $tilelist )
 tlatidx=$( echo $first_tile | cut -d'/' -f1 )
 tlonidx=$( echo $first_tile | cut -d'/' -f2 )
-$PSIMS_ROOT/pysims/sanity.py --campaign $campaign --params $workdir/params.psims --tlatidx $tlatidx --tlonidx $tlonidx
+$PSIMS_ROOT/pysims/sanity.py --campaign $campaign --params $workdir/params.psims --tlatidx $tlatidx --tlonidx $tlonidx --tilelist $tilelist
 sanity=$?
 if [ $sanity -ne 0 ]; then
     rm -rf $workdir

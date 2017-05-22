@@ -9,7 +9,7 @@ from shutil import copyfile
 from netCDF4 import Dataset as nc
 import re, json, copy, datetime as dt
 from datetime import datetime, timedelta
-from numpy import nan, isnan, double, resize, where, prod, newaxis, repeat, reshape, zeros, array, append, intersect1d, setdiff1d
+from numpy import nan, isnan, double, resize, where, prod, newaxis, repeat, reshape, zeros, array, append, intersect1d, setdiff1d, float64, int32
 
 # UTILITY FUNCTIONS
 def list_replace(arr, var, val, occ = nan, cnt = 1):
@@ -92,11 +92,41 @@ def combinefiles(files, outfile):
 class Camp2Json(translator.Translator):
 
     def verify_params(self, latidx, lonidx):
-        delta = self.config.get('delta')
-        delta = delta.split(',')
-        if len(delta) < 1 or len(delta) > 2:
-            return (False, "%s translator: invalid delta value" % type(self).__name__)
-        return (True, "%s translator liked the parameters" % type(self).__name__)
+
+        # Check extent and resolution of campaign file
+        num_lats = self.config.get('num_lats')
+        num_lons = self.config.get('num_lons')
+        lat_zero = self.config.get('lat_zero')
+        lon_zero = self.config.get('lon_zero')
+        campaign = self.config.get('campaign')
+        campaignfiles = self.config.get_dict(self.translator_type, 'campaignfile')
+        delta = int(self.config.get('delta').split(',')[0]) / 60.0
+        offset = delta / 2
+        tname = type(self).__name__
+
+        if not isinstance(campaignfiles, list):
+            campaignfiles = [campaignfiles]
+
+        for campaignfile in campaignfiles:
+            campaignfile = os.path.join(campaign, campaignfile)
+            with nc(campaignfile) as f:
+                if not isinstance(f.variables['lat'][0], float64) or not isinstance(f.variables['lon'][0], float64):
+                    return False, "%s translator: Campaign file should have lat/lon dimensions as doubles" % tname
+                if num_lats != len(f.variables['lat']):
+                    return False, "%s translator: Campaign file has a different number of lats than simulation" % tname
+                if num_lons != len(f.variables['lon']):
+                    return False, "%s translator: Campaign file has a different number of lons than simulation" % tname
+                if (lat_zero - offset - delta) != f.variables['lat'][1]:
+                    return False, "%s translator: Campaign file has a different grid spacing than the simulation" % tname
+                if lat_zero - offset != f.variables['lat'][0]:
+                    return False, "%s translator: Campaign file starts at a different lat than the simulation" % tname
+                if lon_zero + offset != f.variables['lon'][0]:
+                    return False, "%s translator: Campaign file starts at a different lon than the simulation" % tname
+                if 'time' in f.variables:
+                    if not isinstance(f.variables['time'][0], int32):
+                        return False, "%s translator: Campaign file should have time unit as int" % tname
+
+        return True, "%s translator liked the parameters" % tname
 
     def run(self, latidx, lonidx):
         try:
