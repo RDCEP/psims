@@ -1629,14 +1629,14 @@ class SOLFileOutput:
                 if slhw_min != self.def_val:
                     slphw = max(double(slphw), double(slhw_min))
                     slphw = for_str(slphw, 1, 'r', 5, jtfy = 'r', ndec = 1)
+                if srgf_scale != self.def_val:
+                    slrgf = double(slrgf) * double(srgf_scale)
+                    slrgf = for_str(slrgf, 1, 'r', 5, ndec=2)
                 if srgf_min != self.def_val:
                     slrgf = max(double(slrgf), double(srgf_min))
                     slrgf = for_str(slrgf, 1, 'r', 5, ndec = 2)
                 if srgf_max != self.def_val:
                     slrgf = min(double(slrgf), double(srgf_max))
-                    slrgf = for_str(slrgf, 1, 'r', 5, ndec=2)
-                if srgf_scale != self.def_val:
-                    slrgf = double(slrgf) * double(srgf_scale)
                     slrgf = for_str(slrgf, 1, 'r', 5, ndec=2)
 
                 sksat = str(max(double(sksat), 0.1))
