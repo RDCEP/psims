@@ -96,7 +96,7 @@ def ptransfer(slcly, slsil, sloc, slcf):
     return slll, sldul, slsat, sksat, slbdm
 
 # Modify variables related to soil water content
-def swc_adjustments(sldul, slll, slsat, swc_delta):
+def swc_adjustments(sldul, slll, slsat, swc_delta, swc_scale):
     # If slll < slll_min, do nothing
     slll_min = 0.04
     if slll <= slll_min:
@@ -104,7 +104,7 @@ def swc_adjustments(sldul, slll, slsat, swc_delta):
 
     # Calculate ideal slll_delta
     swc = sldul - slll
-    target_swc = swc + swc_delta
+    target_swc = (swc + swc_delta) * swc_scale
     slll_delta = 0.5 * (slll + target_swc - sldul)
 
     # Adjust delta based on slll_min constraint
@@ -138,7 +138,7 @@ class DSSATXFileOutput:
                          'fl-lf', 'lfmax', 'slavr', 'sizlf', 'xfrt', 'wtpsd', \
                          'sfdur', 'sdpdv', 'podur', 'thrsh', 'sdpro', 'sdlip'], \
                   'WH': ['p1v', 'p1d', 'p5', 'g1', 'g2', 'g3', 'phint'], \
-                  'RI': ['p1', 'p2r', 'p5', 'p2o', 'g1', 'g2', 'g3', 'g4'], \
+                  'RI': ['p1', 'p2r', 'p5', 'p2o', 'g1', 'g2', 'g3', 'g4', 'phint'], \
                   'SG': ['p1', 'p2', 'p2o', 'p2r', 'panth', 'p3', 'p4', 'p5', 'phint', \
                          'g1', 'g2', 'pbase', 'psat'], \
                   'ML': ['p1', 'p20', 'p2r', 'p5', 'g1', 'g4', 'phint'], \
@@ -205,17 +205,21 @@ class DSSATXFileOutput:
 
             # soil parameters
             delta_cly     = self.exps[i]['delta_cly']     if 'delta_cly'     in self.exps[i] else '0'
-            delta_swc     = self.exps[i]['delta_swc']     if 'delta_swc'     in self.exps[i] else self.def_val_R
+            delta_swc     = self.exps[i]['delta_swc']     if 'delta_swc'     in self.exps[i] else '0'
+            scale_swc     = self.exps[i]['scale_swc']     if 'scale_swc'     in self.exps[i] else '1'
             slpf          = self.exps[i]['slpf']          if 'slpf'          in self.exps[i] else self.def_val_R
             sldr_min      = self.exps[i]['sldr_min']      if 'sldr_min'      in self.exps[i] else self.def_val_R
             slro_max      = self.exps[i]['slro_max']      if 'slro_max'      in self.exps[i] else self.def_val_R
+            srgf_min      = self.exps[i]['srgf_min']      if 'srgf_min'      in self.exps[i] else self.def_val_R
+            srgf_max      = self.exps[i]['srgf_max']      if 'srgf_max'      in self.exps[i] else self.def_val_R
+            srgf_scale    = self.exps[i]['srgf_scale']    if 'srgf_scale'    in self.exps[i] else self.def_val_R
             null_out_vars = self.exps[i]['null_out_vars'] if 'null_out_vars' in self.exps[i] else self.def_val_R
             slsnd_max     = self.exps[i]['slsnd_max']     if 'slsnd_max'     in self.exps[i] else self.def_val_R
             sloc_min      = self.exps[i]['sloc_min']      if 'sloc_min'      in self.exps[i] else self.def_val_R
             slhw          = self.exps[i]['slhw']          if 'slhw'          in self.exps[i] else self.def_val_R
             slhw_min      = self.exps[i]['slhw_min']      if 'slhw_min'      in self.exps[i] else self.def_val_R
 
-            soil_profile = [soil_id, delta_cly, delta_swc, slpf, sldr_min, slro_max, null_out_vars, slsnd_max, sloc_min, slhw, slhw_min]
+            soil_profile = [soil_id, delta_cly, delta_swc, scale_swc, slpf, sldr_min, slro_max, srgf_min, srgf_max, srgf_scale, null_out_vars, slsnd_max, sloc_min, slhw, slhw_min]
 
             element_found = False
             for j in range(len(soil_profiles)):
@@ -256,7 +260,7 @@ class DSSATXFileOutput:
                     soil_layer_dic['ich2o'] = str(sldul)
                     soil_layers_arr[j] = soil_layer_dic
 
-                self.soil_ic[soil_id_composite] = soil_layers_arr         
+                self.soil_ic[soil_id_composite] = soil_layers_arr
 
         self.version  = version
         self.cul_file = cul_file
@@ -415,11 +419,15 @@ class DSSATXFileOutput:
                     fl_data['soil_id'] = soil_id[: idx]
 
                 fl_data2['soil_id'] = fl_data['soil_id']
-                self.__copy_item(fl_data2, root_data, 'delta_cly') # JPC: ADDED DELTA_CLY 06/12/14
+                self.__copy_item(fl_data2, root_data, 'delta_cly')
                 self.__copy_item(fl_data2, root_data, 'delta_swc')
+                self.__copy_item(fl_data2, root_data, 'scale_swc')
                 self.__copy_item(fl_data2, root_data, 'slpf')
                 self.__copy_item(fl_data2, root_data, 'sldr_min')
                 self.__copy_item(fl_data2, root_data, 'slro_max')
+                self.__copy_item(fl_data2, root_data, 'srgf_min')
+                self.__copy_item(fl_data2, root_data, 'srgf_max')
+                self.__copy_item(fl_data2, root_data, 'srgf_scale')
                 self.__copy_item(fl_data2, root_data, 'null_out_vars')
                 self.__copy_item(fl_data2, root_data, 'slsnd_max')
                 self.__copy_item(fl_data2, root_data, 'sloc_min')
@@ -910,16 +918,16 @@ class DSSATXFileOutput:
         # ENVIRONMENT MODIFICATIONS section
         if me_arr != []:
             x_str += '*ENVIRONMENT MODIFICATIONS\n'
-            x_str += '@E ODATE EDAY  ERAD  EMAX  EMIN  ERAIN ECO2  EDEW  EWIND ENVNAME\n'
+            x_str += '@E      ODATE   EDAY  ERAD  EMAX  EMIN  ERAIN ECO2  EDEW  EWIND ENVNAME\n'
             for i in range(len(me_arr)):
                 sec_data_arr = me_arr[i]
                 for j in range(len(sec_data_arr)):
                     sec_data = sec_data_arr[j]['data']
                     odyer = self.__get_obj(sec_data, 'odyer', dC).split('.')[0] # remove decimal part
-                    odyer = for_str(odyer, 1, 'c', 2, zero_pad = True)
+                    odyer = for_str(odyer, 0, 'r', 4, zero_pad = True)
                     odday = self.__get_obj(sec_data, 'odday', dC).split('.')[0]
-                    odday = for_str(odday, 0, 'c', 3, zero_pad = True)
-                    x_str += for_str(str(i + 1), 0, 'r', 2) + \
+                    odday = for_str(odday, 0, 'r', 3, zero_pad = True)
+                    x_str += for_str(str(i + 1), 0, 'r', 8, jtfy='l') + \
                              odyer + odday + \
                              for_field(sec_data, 'eday', dC, 1, 'c', 5) + \
                              for_field(sec_data, 'erad', dC, 1, 'c', 5) + \
@@ -941,7 +949,7 @@ class DSSATXFileOutput:
                 for j in range(len(sec_data_arr)):
                     sec_data = sec_data_arr[j]
                     date = self.__translate_date_str(self.__get_obj(sec_data, 'date', dD))
-                    x_str += for_str(str(i + 1), 0, 'r', 7, jtfy = 'l') + \
+                    x_str += for_str(str(i + 1), 0, 'c', 7, jtfy = 'l') + \
                              for_str(date, 1, 'c', 5) + \
                              for_field(sec_data, 'hastg', dC, 1, 'c', 5, jtfy = 'l') + \
                              for_field(sec_data, 'hacom', dC, 1, 'c', 5, jtfy = 'l') + \
@@ -1463,9 +1471,13 @@ class SOLFileOutput:
 
             delta_cly     = self.exps[i]['delta_cly']     if 'delta_cly'     in self.exps[i] else '0'
             slpf          = self.exps[i]['slpf']          if 'slpf'          in self.exps[i] else '-99'
-            delta_swc     = self.exps[i]['delta_swc']     if 'delta_swc'     in self.exps[i] else self.def_val
+            delta_swc     = self.exps[i]['delta_swc']     if 'delta_swc'     in self.exps[i] else '0'
+            scale_swc     = self.exps[i]['scale_swc']     if 'scale_swc'     in self.exps[i] else '1'
             sldr_min      = self.exps[i]['sldr_min']      if 'sldr_min'      in self.exps[i] else self.def_val
             slro_max      = self.exps[i]['slro_max']      if 'slro_max'      in self.exps[i] else self.def_val
+            srgf_min      = self.exps[i]['srgf_min']      if 'srgf_min'      in self.exps[i] else self.def_val
+            srgf_max      = self.exps[i]['srgf_max']      if 'srgf_max'      in self.exps[i] else self.def_val
+            srgf_scale    = self.exps[i]['srgf_scale']    if 'srgf_scale'    in self.exps[i] else self.def_val
             null_out_vars = self.exps[i]['null_out_vars'] if 'null_out_vars' in self.exps[i] else self.def_val
             slsnd_max     = self.exps[i]['slsnd_max']     if 'slsnd_max'     in self.exps[i] else self.def_val
             sloc_min      = self.exps[i]['sloc_min']      if 'sloc_min'      in self.exps[i] else self.def_val
@@ -1479,8 +1491,12 @@ class SOLFileOutput:
                             'delta_cly'    : delta_cly,     \
                             'slpf'         : slpf,          \
                             'delta_swc'    : delta_swc,     \
+                            'scale_swc'    : scale_swc,     \
                             'sldr_min'     : sldr_min,      \
                             'slro_max'     : slro_max,      \
+                            'srgf_min'     : srgf_min,      \
+                            'srgf_max'     : srgf_max,      \
+                            'srgf_scale'   : srgf_scale,    \
                             'null_out_vars': null_out_vars, \
                             'slsnd_max'    : slsnd_max,     \
                             'sloc_min'     : sloc_min,      \
@@ -1491,7 +1507,7 @@ class SOLFileOutput:
             element_found = False
             for j in range(len(self.soil_profiles)):
                 if self.soil_profiles[j] == soil_profile: element_found = True
-            if not element_found: 
+            if not element_found:
                 self.soil_profiles.append(soil_profile)
 
         self.use_ptransfer = use_ptransfer
@@ -1506,6 +1522,10 @@ class SOLFileOutput:
             soil_idx      = self.soil_profiles[i]['soil_idx']
             delta_cly     = self.soil_profiles[i]['delta_cly']
             delta_swc     = self.soil_profiles[i]['delta_swc']
+            scale_swc     = self.soil_profiles[i]['scale_swc']
+            srgf_max      = self.soil_profiles[i]['srgf_max']
+            srgf_min      = self.soil_profiles[i]['srgf_min']
+            srgf_scale    = self.soil_profiles[i]['srgf_scale']
             sldr_min      = self.soil_profiles[i]['sldr_min']
             slro_max      = self.soil_profiles[i]['slro_max']
             null_out_vars = self.soil_profiles[i]['null_out_vars'] in ['True', 'true']
@@ -1514,7 +1534,7 @@ class SOLFileOutput:
             slhw          = self.soil_profiles[i]['slhw']
             slhw_min      = self.soil_profiles[i]['slhw_min']
 
-            # get and format variables            
+            # get and format variables
             soil_id = for_str('SL' + str(i + 1).zfill(8), 0, 'c', 10, jtfy = 'l')
             sl_source = for_field(soils[soil_idx], 'sl_source', def_val, 2, 'c', 11, jtfy = 'l')
             sltx = for_field(soils[soil_idx], 'sltx', def_val, 1, 'c', 5, jtfy = 'l')
@@ -1536,6 +1556,7 @@ class SOLFileOutput:
             smhb  = for_field(soils[soil_idx], 'smhb', def_val, 1, 'c', 5, jtfy = 'l')
             smpx  = for_field(soils[soil_idx], 'smpx', def_val, 1, 'c', 5, jtfy = 'l')
             smke  = for_field(soils[soil_idx], 'smke', def_val, 1, 'c', 5, jtfy = 'l')
+            srgf  = for_field(soils[soil_idx], 'srgf', def_val, 1, 'c', 5, jtfy = 'l')
 
             if self.soil_profiles[i]['slpf'] != '-99':
                 slpf = for_str(self.soil_profiles[i]['slpf'], 1, 'r', 5, jtfy = 'r', ndec = 2)
@@ -1583,9 +1604,7 @@ class SOLFileOutput:
                     sksat = soilLayer[j]['ssks'] if 'ssks' in soilLayer[j] else self.def_val
                     slbdm = soilLayer[j]['sbdm'] if 'sbdm' in soilLayer[j] else self.def_val
 
-                # swc_adjustments
-                if delta_swc != self.def_val:
-                    (sldul, slll, slsat) = swc_adjustments(float(sldul), float(slll), float(slsat), float(delta_swc))
+                (sldul, slll, slsat) = swc_adjustments(float(sldul), float(slll), float(slsat), float(delta_swc), float(scale_swc))
 
                 # get and format variables
                 slcly = for_str(slcly, 1, 'r', 5, jtfy = 'r', ndec = 1)
@@ -1610,6 +1629,15 @@ class SOLFileOutput:
                 if slhw_min != self.def_val:
                     slphw = max(double(slphw), double(slhw_min))
                     slphw = for_str(slphw, 1, 'r', 5, jtfy = 'r', ndec = 1)
+                if srgf_min != self.def_val:
+                    slrgf = max(double(slrgf), double(srgf_min))
+                    slrgf = for_str(slrgf, 1, 'r', 5, ndec = 2)
+                if srgf_max != self.def_val:
+                    slrgf = min(double(slrgf), double(srgf_max))
+                    slrgf = for_str(slrgf, 1, 'r', 5, ndec=2)
+                if srgf_scale != self.def_val:
+                    slrgf = double(slrgf) * double(srgf_scale)
+                    slrgf = for_str(slrgf, 1, 'r', 5, ndec=2)
 
                 sksat = str(max(double(sksat), 0.1))
                 sksat = for_str(sksat, 1, 'r', 5, jtfy = 'r', ndec = 1)
@@ -1667,7 +1695,7 @@ class Jsons2DssatLong(translator.Translator):
             SOLfile = self.config.get_dict(self.translator_type, 'SOLfile', default='soil.SOL')
             CULfile = self.config.get_dict(self.translator_type, 'CULfile', default=None)
             ECOfile = self.config.get_dict(self.translator_type, 'ECOfile', default='MZCER045.ECO')
-            version = self.config.get_dict(self.translator_type, 'version', default='4.6')
+            version = str(self.config.get_dict(self.translator_type, 'version', default='4.6'))
             pfcn = self.config.get_dict(self.translator_type, 'pfcn', default=False)
             y2k = self.config.get_dict(self.translator_type, 'y2k', default=True)
 
