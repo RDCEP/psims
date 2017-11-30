@@ -2,30 +2,33 @@
 
 # import modules
 import abc
-import json, airspeed, traceback
-from numpy import double
-from optparse import OptionParser
-from scipy.interpolate import interp1d as interp1d
-from .. import translator
-import os
+import airspeed
 import json
 import netCDF4
+import os
+import traceback
+from numpy import double
+from scipy.interpolate import interp1d as interp1d
+from .. import translator
 
-# helper functions
-def get_field(struct, field, default = '?'):
-    return default if not field in struct else struct[field]
+
+def get_field(struct, field, default='?'):
+    return default if field not in struct else struct[field]
+
 
 def format_date(yyyymmdd):
     if yyyymmdd == '?':
         return '?'
     else:
-        return yyyymmdd[6 : 8] + '/' + yyyymmdd[4 : 6] + '/' + yyyymmdd[: 4]
+        return yyyymmdd[6:8] + '/' + yyyymmdd[4:6] + '/' + yyyymmdd[:4]
+
 
 def date2num(ddmmyyyy):
     if ddmmyyyy:
         return '?'
     else:
-        return int(ddmmyyyy[: 2]) + 100 * int(ddmmyyyy[3 : 5]) + 10000 * int(ddmmyyyy[6 : 10])
+        return int(ddmmyyyy[:2]) + 100 * int(ddmmyyyy[3:5]) + 10000 * int(ddmmyyyy[6:10])
+
 
 def find_idx(arr, m):
     for i in range(len(arr)):
@@ -34,8 +37,9 @@ def find_idx(arr, m):
     arr.append(m)
     return len(arr) - 1
 
+
 def tile_to_dict(tile):
-    data = {}
+    data = dict()
     data['soils'] = [{}]
     data['soils'][0] = {}
     data['soils'][0]['soilLayer'] = []
@@ -53,7 +57,6 @@ def tile_to_dict(tile):
             vals.append(tile.variables[v].long_name)
         else:
             vals = tile.variables[v][:].flatten()
-        ndims = len(tile.variables[v].dimensions)
         if 'depth' in tile.variables[v].dimensions:
             for layer in range(0, nlayers):
                 data['soils'][0]['soilLayer'][layer][v] = str(vals[layer])
@@ -62,36 +65,43 @@ def tile_to_dict(tile):
 
     for a in tile.ncattrs():
         data['soils'][0][a] = str(tile.getncattr(a))
-    for layer,val in enumerate(tile.variables['depth']):
+    for layer, val in enumerate(tile.variables['depth']):
         data['soils'][0]['soilLayer'][layer]['sllb'] = str(val)
     return data
 
-# management event base class
+
 class Event(object):
+    """
+    Management event base class
+    """
     __metaclass__ = abc.ABCMeta
+
     def __init__(self, event_struct):
         self.date = get_field(event_struct, 'date')
         if self.date != '?':
             self.date = format_date(self.date)
+
     @abc.abstractmethod 
     def get_apsim_action(self): return
 
-# management subclasses
-# tillage
+
 class Tillage(Event):
+
     def __init__(self, event_struct):
-        super(Tillage, self).__init__(event_struct) # class superclass
+        super(Tillage, self).__init__(event_struct)
         self.implement_name = get_field(event_struct, 'tiimp')
         self.depth = get_field(event_struct, 'tidep')
+
     def get_apsim_action(self):
         act = 'SurfaceOrganicMatter tillage type=' + self.implement_name
         act += ', f_incorp=0, tillage_depth=' + self.depth
         return act
 
-# planting
+
 class Planting(Event):
+
     def __init__(self, event_struct):
-        super(Planting, self).__init__(event_struct) # call superclass
+        super(Planting, self).__init__(event_struct)
         self.crop_name = get_field(event_struct, 'crid')
         self.population = get_field(event_struct, 'plpop')
         self.depth = get_field(event_struct, 'pldp')
@@ -103,6 +113,7 @@ class Planting(Event):
         self.row_spacing = get_field(event_struct, 'plrs')
         if self.row_spacing != '?':
             self.row_spacing = str(10. * double(self.row_spacing))
+
     def get_apsim_action(self):
         act = self.crop_name
         act += " sow plants = " + self.population
@@ -112,37 +123,42 @@ class Planting(Event):
         act += ", crop_class = plant"
         return act
 
-# irrigation
+
 class Irrigation(Event):
+
     def __init__(self, event_struct):
-        super(Irrigation, self).__init__(event_struct) # call superclass
+        super(Irrigation, self).__init__(event_struct)
         self.amount = get_field(event_struct, 'irval')
+
     def get_apsim_action(self):
         return 'irrigation apply amount = ' + self.amount + ' (mm) '
 
-# fertilizer
+
 class Fertilizer(Event):
+
     def __init__(self, event_struct):
-        super(Fertilizer, self).__init__(event_struct) # call superclass
+        super(Fertilizer, self).__init__(event_struct)
         self.nitrogen = get_field(event_struct, 'feamn')
-        self.depth = get_field(event_struct, 'fedep')        
+        self.depth = get_field(event_struct, 'fedep')
+
     def get_apsim_action(self):
         act = 'fertiliser apply amount = ' + self.nitrogen + ' (kg/ha)'
         act += ', type = no3_n (), depth = ' + self.depth + ' (mm)'
         return act
 
-# organic matter
+
 class OrganicMatter(Event):
+
     def __init__(self, event_struct):
-        super(OrganicMatter, self).__init__(event_struct) # call superclass
+        super(OrganicMatter, self).__init__(event_struct)
         self.amount = get_field(event_struct, 'omamt')
         self.depth = get_field(event_struct, 'omdep')
         self.carbon = get_field(event_struct, 'omc%')
         self.nitrogen = get_field(event_struct, 'omn%')
-        self.phosphorus = get_field(event_struct, 'omp%')        
+        self.phosphorus = get_field(event_struct, 'omp%')
+
     def get_apsim_action(self):
         cnr = '?'
-        cpr = '?'
         act = 'SurfaceOrganicMatter add_surfaceom type=manure, name=manure, '
         act += 'mass=' + self.amount + '(kg/ha), '
         act += 'depth = ' + self.depth + ' (mm)'
@@ -160,32 +176,42 @@ class OrganicMatter(Event):
                     amount_carbon = double(self.carbon) / 100. * double(self.amount)
                     amount_phosphorus = double(self.phosphorus) / 100. * double(self.amount)
                     if amount_phosphorus == 0.:
-                        cpr = '0';
+                        cpr = '0'
                     else:
                         cpr = str(amount_carbon / amount_phosphorus * 100.)
                     act += ', cpr = ' + cpr
         return act
 
-# chemical
-class Chemical(Event):
-    def __init__(self, event_struct):
-        super(Chemical, self).__init__(event_struct) # call superclass
-    def get_apsim_action(self): return ''
 
-# harvest
-class Harvest(Event):
+class Chemical(Event):
+
     def __init__(self, event_struct):
-        super(Harvest, self).__init__(event_struct) # call superclass
-    def get_apsim_action(self): return ''
+        super(Chemical, self).__init__(event_struct)
+
+    def get_apsim_action(self):
+        return ''
+
+
+class Harvest(Event):
+
+    def __init__(self, event_struct):
+        super(Harvest, self).__init__(event_struct)
+
+    def get_apsim_action(self):
+        return ''
+
 
 def get_layers(soil):
-    # variables used for computation
-    num_layers = len(soil['soilLayer'])  
-    kl_x = [0, 15, 30, 60, 90, 120, 150, 180, 1e10] # add leftmost and rightmost bin edges
+    num_layers = len(soil['soilLayer'])
+
+    # add leftmost and rightmost bin edges
+    kl_x = [0, 15, 30, 60, 90, 120, 150, 180, 1e10]
     kl_y = [0.08, 0.08, 0.08, 0.08, 0.06, 0.06, 0.04, 0.02, 0.02]
     kl_interp = interp1d(kl_x, kl_y)
     fbiom_per_layer = 0.03 / (num_layers - 1) if num_layers > 1 else 0.03
-    finert_x = [0, 15, 30, 60, 90, 1e10] # add leftmost and rightmost bin edges
+
+    # add leftmost and rightmost bin edges
+    finert_x = [0, 15, 30, 60, 90, 1e10]
     finert_y = [0.4, 0.4, 0.5, 0.7, 0.95, 0.95]
     finert_interp = interp1d(finert_x, finert_y)
 
@@ -221,6 +247,7 @@ def get_layers(soil):
 
     return layers
 
+
 def get_soil_structure(soil):
     soil_struct = {}
 
@@ -249,17 +276,18 @@ def get_soil_structure(soil):
     soil_struct['latitude'] = get_field(soil, 'soil_lat')
     soil_struct['longitude'] = get_field(soil, 'soil_long')
     soil_struct['source'] = get_field(soil, 'sl_source')
-
-    # layer data
     soil_struct['layers'] = get_layers(soil)
 
     return soil_struct
 
+
 def get_management(exp):
     man = {}
 
-    if not 'management' in exp: return man
-    if not 'events' in exp['management']: return man
+    if 'management' not in exp:
+        return man
+    if 'events' not in exp['management']:
+        return man
 
     # planting crop name
     num_events = len(exp['management']['events'])
@@ -281,7 +309,7 @@ def get_management(exp):
             event_obj = Tillage(event_struct)
         elif get_field(event_struct, 'event') == 'planting':
             event_obj = Planting(event_struct)
-        elif get_field(event_struct, 'event')  == 'irrigation':
+        elif get_field(event_struct, 'event') == 'irrigation':
             event_obj = Irrigation(event_struct)
         elif get_field(event_struct, 'event') == 'fertilizer':
             event_obj = Fertilizer(event_struct)
@@ -295,9 +323,9 @@ def get_management(exp):
             Exception('Unknown management event')
         man['events'][i]['date'] = event_obj.date
         man['events'][i]['apsimAction'] = event_obj.get_apsim_action()
-    man['events'] = sorted(man['events'], key = lambda x: date2num(x['date'])) # sort events
-
+    man['events'] = sorted(man['events'], key=lambda x: date2num(x['date']))
     return man
+
 
 def get_initial_condition(exp, soil):
     ic_struct = {}
@@ -305,19 +333,19 @@ def get_initial_condition(exp, soil):
 
     # date, residue type, residue weight
     ic_struct['date'] = format_date(get_field(ic, 'icdat'))
-    residueType = get_field(ic, 'residueType')
-    if residueType == '?':
-        ic_struct['residueType'] = get_field(exp, 'crop_name')
+    residue_type = get_field(ic, 'residue_type')
+    if residue_type == '?':
+        ic_struct['residue_type'] = get_field(exp, 'crop_name')
     else:
-        ic_struct['residueType'] = residueType
+        ic_struct['residue_type'] = residue_type
     ic_struct['residueWeight'] = get_field(ic, 'icrag')
     ic_struct['standing_fraction'] = get_field(ic, 'standing_fraction')
     ic_struct['water_fraction_full'] = get_field(ic, 'water_fraction_full')
 
     # NH4
-    if not 'icnh4' in ic:
+    if 'icnh4' not in ic:
         layers = get_field(ic, 'soilLayer', [])
-        icnh4  = get_field(layers[0], 'icnh4', '-99') if layers != [] else '-99'
+        icnh4 = get_field(layers[0], 'icnh4', '-99') if layers != [] else '-99'
     else:
         icnh4 = ic['icnh4']
 
@@ -333,8 +361,8 @@ def get_initial_condition(exp, soil):
         soil_water = min(fracf * sdul, 0.75)
 
         layers[i]['thickness'] = get_field(soil['layers'][i], 'thickness')
-        layers[i]['no3']       = get_field(soil['layers'][i], 'organicCarbon')
-        layers[i]['nh4']       = str(icnh4)
+        layers[i]['no3'] = get_field(soil['layers'][i], 'organicCarbon')
+        layers[i]['nh4'] = str(icnh4)
         layers[i]['soilWater'] = str(soil_water)
 
     ic_struct['soilLayers'] = layers
@@ -346,17 +374,18 @@ def get_initial_condition(exp, soil):
 
     return ic_struct
 
+
 class Jsons2Apsim(translator.Translator):
     def run(self, latidx, lonidx):
         try:
-            soiltile     = self.config.get_dict(self.translator_type, 'soiltile', default="1.soil.nc4")
-            expfile      = self.config.get_dict(self.translator_type, 'expfile')
+            soiltile = self.config.get_dict(self.translator_type, 'soiltile', default="1.soil.nc4")
+            expfile = self.config.get_dict(self.translator_type, 'expfile')
             templatefile = self.config.get_dict(self.translator_type, 'templatefile')
             cultivarfile = self.config.get_dict(self.translator_type, 'cultivarfile')
-            outputfile   = self.config.get_dict(self.translator_type, 'outputfile')
+            outputfile = self.config.get_dict(self.translator_type, 'outputfile')
    
             soil_json = tile_to_dict(netCDF4.Dataset(soiltile))
-            exp_json  = json.load(open(expfile))
+            exp_json = json.load(open(expfile))
             
             # simulation structure
             num_experiments = len(exp_json['experiments'])
@@ -371,7 +400,7 @@ class Jsons2Apsim(translator.Translator):
             for i in range(num_experiments):
                 exp_i = exp_json['experiments'][i]
                 # global
-                s_tmp = {}
+                s_tmp = dict()
                 s_tmp['cropName'] = exp_i['crop_name']
                 s_tmp['startDate'] = exp_i['start_date']
                 s_tmp['endDate'] = exp_i['end_date']
@@ -380,13 +409,13 @@ class Jsons2Apsim(translator.Translator):
                 if 'micromet' in exp_i.keys():
                     s_tmp['micromet'] = exp_i['micromet']
                 else:
-                    s_tmp['micromet'] = 'off' # default to off
+                    s_tmp['micromet'] = 'off'
             
                 # weather
                 s_tmp['weather'] = exp_i['weather']
             
                 # soil
-                soil_id  = get_field(exp_i, 'soil_id', 'XY01234567')
+                soil_id = get_field(exp_i, 'soil_id', 'XY01234567')
                 soil_idx = soil_ids.index(soil_id)
                 s_tmp['soil'] = get_soil_structure(soil_json['soils'][soil_idx])
             
@@ -398,15 +427,18 @@ class Jsons2Apsim(translator.Translator):
             
                 # planting
                 s_tmp['planting'] = exp_i['planting']
-                if s_tmp['planting']['cultivar'] == 'custom': # custom cultivar definition
+                # custom cultivar definition
+                if s_tmp['planting']['cultivar'] == 'custom':
                     cultivar = s_tmp['planting'].copy()
                     for v in ['pdate', 'sowing_density', 'depth', 'cultivar', 'edate', 'row_spacing']:
                         cultivar.pop(v)
                     idx = find_idx(cultivars, cultivar)
-                    if len(cultivars) != len(cul_names): # new element
+                    # new element
+                    if len(cultivars) != len(cul_names):
                         cul_names += ['CC' + str(idx).zfill(4)]
-                    s_tmp['planting']['cultivar'] = cul_names[idx] # change cultivar name
-            
+                    # change cultivar name
+                    s_tmp['planting']['cultivar'] = cul_names[idx]
+
                 # fertilizer
                 s_tmp['fertilizer'] = exp_i['fertilizer']
             
@@ -422,7 +454,6 @@ class Jsons2Apsim(translator.Translator):
             
                 # output variables
                 s_tmp['output_variables'] = exp_i['output_variables']
-            
                 s['experiments'][i] = s_tmp
             
             # find and replace within template and write output file
@@ -439,6 +470,7 @@ class Jsons2Apsim(translator.Translator):
                 with open(crop_name + '.xml', 'w') as f:
                     f.write(cultivar_template.merge({'cultivars': cultivars}))
             return True
+        
         except:
             print "[%s]: (%04d/%04d) %s" % (os.path.basename(__file__), latidx, lonidx, traceback.format_exc())
             return False
