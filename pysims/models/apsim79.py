@@ -20,7 +20,7 @@ class Apsim79(Model):
             stdout_file = open('RESULT.OUT', 'w')
             stdout_file.write(stdout)
             if p.returncode != 0:
-                rc = p.returncode
+                return False
 
             # Run apsim for each sim file
             for sim in glob.glob('*.sim'):
@@ -28,7 +28,7 @@ class Apsim79(Model):
                 stdout, stderr = p.communicate()
                 stdout_file.write(stdout)
                 if p.returncode != 0:
-                    rc = p.returncode
+                    return False
             stdout_file.close()
             return True
 
