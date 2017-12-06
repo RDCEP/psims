@@ -4,35 +4,46 @@ from nco import Nco
 from os import remove
 from .. import checker
 from re import compile
-from netCDF4 import Dataset as nc
+from netCDF4 import Dataset
 from numpy.ma import isMaskedArray
-from numpy import double, array, diff
+from numpy import array, diff
 
-def apply_prefix(filename, prefix):
-    return os.path.join(prefix, filename)
 
 class SimpleChecker(checker.Checker):
 
     def verify_params(self, latidx, lonidx):
+        harvested_area = self.config.get('harvested_area')
+        simgfile = self.config.get_dict(self.checker_type, 'simgfile')
+        simgfile_var = "mask"
         tname = type(self).__name__
-        simgfile = self.config.get_dict(self.checker_type, 'simgfile', default = '../../simgrid.nc4')
-        if not os.path.exists(simgfile):
-            return (False, "%s checker simgfile %s does not exist!" % (tname, simgfile))
+
+        if not simgfile and harvested_area:
+            simgfile = harvested_area
+            simgfile_var = "area"
+
         try:
-            simg_nc4 = nc(simgfile, 'r')
-            if 'mask' not in simg_nc4.variables:
-                return (False, "%s checker simgfile %s does not contain mask variable!" % (tname, simgfile))
-        except:
-            return (False, "%s checker error opening %s as a NetCDF file" % (tname, simgfile))
-        return (True, "%s checker likes the parameters" % tname)
+            nc = Dataset(simgfile)
+            if simgfile_var not in nc.variables:
+                return False, "%s checker simgfile %s does not contain mask variable!" % (tname, simgfile)
+        except IOError:
+            return False, "%s checker error opening %s as a NetCDF file" % (tname, simgfile)
+        return True, "%s checker likes the parameters" % tname
 
     def run(self, latidx, lonidx):
         try:
-            inputfile_dir      = self.config.get_dict(self.checker_type, 'inputfile_dir', default = os.path.join('..', '..'))
-            climfiles          = self.config.get_dict(self.checker_type, 'climfile', default = '1.clim.tile.nc4')
-            soilfiles          = self.config.get_dict(self.checker_type, 'soilfile', default = '1.soil.tile.nc4')
-            simgfile           = self.config.get_dict(self.checker_type, 'simgfile', default = 'simgrid.nc4')
-            latdelta, londelta = [double(d) / 60 for d in self.config.get('delta').split(',')] # convert to degrees
+            climfiles = self.config.get_dict(self.checker_type, 'climfile', default='1.clim.tile.nc4')
+            harvested_area = self.config.get('harvested_area')
+            inputfile_dir = self.config.get_dict(self.checker_type, 'inputfile_dir', default=os.path.join('..', '..'))
+            latdelta = self.config.get('latdelta') / 60
+            londelta = self.config.get('londelta') / 60
+            simgfile = self.config.get_dict(self.checker_type, 'simgfile', default='simgrid.nc4')
+            simgfile_var = "mask"
+            soilfiles = self.config.get_dict(self.checker_type, 'soilfile', default='1.soil.tile.nc4')
+            threshold = self.config.get_dict(self.checker_type, 'threshold', default=0)
+
+            if not os.path.exists(simgfile) and harvested_area:
+                simgfile = harvested_area
+                simgfile_var = "area"
 
             if not isinstance(climfiles, list):
                 climfiles = [climfiles]
@@ -40,43 +51,49 @@ class SimpleChecker(checker.Checker):
                 soilfiles = [soilfiles]
 
             # get sim grid deltas
-            with nc(simgfile) as f:
-                lats, lons = f.variables['lat'][:], f.variables['lon'][:]
-                simglatdelta, simglondelta = abs(diff(lats)[0]), abs(diff(lons)[0])
-            minlat, maxlat, minlon, maxlon = self.__get_range(latidx, lonidx, latdelta, londelta, simglatdelta, simglondelta)
+            with Dataset(simgfile) as f:
+                lats = f.variables['lat'][:]
+                lons = f.variables['lon'][:]
+                simglatdelta = abs(diff(lats)[0])
+                simglondelta = abs(diff(lons)[0])
+            minlat, maxlat, minlon, maxlon = self.__get_range(latidx, lonidx, latdelta, londelta, simglatdelta,
+                                                              simglondelta)
 
             # check simgrid file
             nco = Nco()
             options = '-h -d lat,%f,%f -d lon,%f,%f' % (minlat, maxlat, minlon, maxlon)
-            nco.ncks(input = simgfile, output = 'tmp.nc4', options = options)
+            tmpfile = "checker.tmp.nc4"
+            nco.ncks(input=simgfile, output=tmpfile, options=options)
 
-            with nc('tmp.nc4') as f:
-                notmasked = f.variables['mask'][:].any()
-            remove('tmp.nc4')
+            with Dataset(tmpfile) as f:
+                simgdata = f.variables[simgfile_var][:]
+                notmasked = simgdata[simgdata > threshold].any()
+            remove(tmpfile)
 
             if not notmasked:
                 return False
 
             # check weather file(s)
             for i in range(len(climfiles)):
-                climfile = apply_prefix(climfiles[i], inputfile_dir)
+                climfile = os.path.join(inputfile_dir, climfiles[i])
                 if not self.__check_weather(climfile, latidx, lonidx, latdelta, londelta):
                     return False
 
             # check soil file(s)
             for i in range(len(soilfiles)):
-                soilfile = apply_prefix(soilfiles[i], inputfile_dir)
+                soilfile = os.path.join(inputfile_dir, soilfiles[i])
                 if not self.__check_soil(soilfile, latidx, lonidx, latdelta, londelta):
                     return False
 
             return True
 
-        except Exception:
+        except:
             print "[%s]: %s" % (os.path.basename(__file__), traceback.format_exc())
             return False
 
-    def __get_range(self, latidx, lonidx, latdelta, londelta, glatdelta, glondelta):
-        # get latitude, longitude limits
+    @staticmethod
+    def __get_range(latidx, lonidx, latdelta, londelta, glatdelta, glondelta):
+
         if latdelta <= glatdelta:
             minlat = 90 - latdelta * (latidx - 0.5)
             maxlat = minlat
@@ -90,22 +107,24 @@ class SimpleChecker(checker.Checker):
         else:
             minlon = -180 + londelta * (lonidx - 1)
             maxlon = minlon + londelta
-
         return minlat, maxlat, minlon, maxlon
 
     def __check_weather(self, filename, latidx, lonidx, latdelta, londelta):
-        with nc(filename) as f:
-            lats, lons = f.variables['lat'][:], f.variables['lon'][:]
-            glatdelta, glondelta = abs(diff(lats)[0]), abs(diff(lons)[0])
+        with Dataset(filename) as f:
+            lats = f.variables['lat'][:]
+            lons = f.variables['lon'][:]
+            glatdelta = abs(diff(lats)[0])
+            glondelta = abs(diff(lons)[0])
         minlat, maxlat, minlon, maxlon = self.__get_range(latidx, lonidx, latdelta, londelta, glatdelta, glondelta)
 
+        # select first time
         nco = Nco()
-        options = '-h -d time,0 -d lat,%f,%f -d lon,%f,%f' % (minlat, maxlat, minlon, maxlon) # select first time
-        nco.ncks(input = filename, output = 'tmp.nc4', options = options)
+        options = '-h -d time,0 -d lat,%f,%f -d lon,%f,%f' % (minlat, maxlat, minlon, maxlon)
+        tmpfile = "checker.wth.nc4"
+        nco.ncks(input=filename, output=tmpfile, options=options)
 
-        with nc('tmp.nc4') as f:
+        with Dataset(tmpfile) as f:
             varnames = f.variables.keys()
-
             prvars = ['pr', 'prcp', 'pre', 'precip']
             found = False
             for i in range(len(prvars)):
@@ -120,25 +139,26 @@ class SimpleChecker(checker.Checker):
             if not found:
                 pr = array([])
             hasweather = pr.size and (not isMaskedArray(pr) or not pr.mask.all())
-
-        remove('tmp.nc4')
-
+        remove(tmpfile)
         return hasweather
 
     def __check_soil(self, filename, latidx, lonidx, latdelta, londelta):
-        with nc(filename) as f:
-            lats, lons = f.variables['lat'][:], f.variables['lon'][:]
-            glatdelta, glondelta = abs(diff(lats)[0]), abs(diff(lons)[0])
+        with Dataset(filename) as f:
+            lats = f.variables['lat'][:]
+            lons = f.variables['lon'][:]
+            glatdelta = abs(diff(lats)[0])
+            glondelta = abs(diff(lons)[0])
         minlat, maxlat, minlon, maxlon = self.__get_range(latidx, lonidx, latdelta, londelta, glatdelta, glondelta)
 
         nco = Nco()
         options = '-h -d lat,%f,%f -d lon,%f,%f' % (minlat, maxlat, minlon, maxlon)
-        nco.ncks(input = filename, output = 'tmp.nc4', options = options)
+        tmpfile = "checker.soil.nc4"
+        nco.ncks(input=filename, output=tmpfile, options=options)
 
-        with nc('tmp.nc4') as f:
+        with Dataset(tmpfile) as f:
             slsi = f.variables['slsi'][:]
             hassoil = slsi.size and (not isMaskedArray(slsi) or not slsi.mask.all())
 
-        remove('tmp.nc4')
-
+        remove(tmpfile)
         return hassoil
+
