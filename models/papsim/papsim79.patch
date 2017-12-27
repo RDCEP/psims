@@ -1,0 +1,44 @@
+Index: Model/Build/MakeAll.sh
+===================================================================
+--- Model/Build/MakeAll.sh	(revision 4107)
++++ Model/Build/MakeAll.sh	(working copy)
+@@ -7,7 +7,9 @@
+ ulimit -s unlimited
+ rm -f $APSIM/Model/Build/Build.out
+
+-if [ "$1" != "clean" ]; then tclsh VersionStamper.tcl; fi
++if [ "$1" != "clean" ]; then
++    mcs VersionStamper.cs
++fi
+
+ # -------------------------------------------------------------
+ # This script compiles the APSIM engine and modules
+@@ -70,7 +72,6 @@
+ ./MakeProject.sh Millet           $1
+ ./MakeProject.sh Operations       $1
+ ./MakeProject.sh Oryza            $1
+-./MakeProject.sh Ozcot            $1
+ ./MakeProject.sh Parasite         $1
+ ./MakeProject.sh Pasture          $1
+ ./MakeProject.sh PatchInput       $1
+@@ -97,21 +98,17 @@
+ ./MakeProject.sh Supplement       $1
+ ./MakeProject.sh Surface          $1
+ ./MakeProject.sh SurfaceOM        $1
+-./MakeProject.sh SurfaceOrganicMatter        $1
+ ./MakeProject.sh SurfaceTemp      $1
+ ./MakeProject.sh SWIM2            $1
+ ./MakeProject.sh SWIM3            $1
+ ./MakeProject.sh SysBal           $1
+-./MakeProject.sh SysBal2          $1
+ ./MakeProject.sh TclLink          $1
+ ./MakeProject.sh Tracker          $1
+ ./MakeProject.sh Tree             $1
+ ./MakeProject.sh UrinePatch       $1
+-#./MakeProject.sh VenLink          $1
+ ./MakeProject.sh WaterSupply      $1
+ ./MakeProject.sh YieldProphet     $1
+ ./MakeProject.sh DDRules          $1
+ ./MakeProject.sh FarmSimGraze     $1
+-./MakeProject.sh ApsimX           $1
+ ./MakeProject.sh JobScheduler/CreatePatch      $1

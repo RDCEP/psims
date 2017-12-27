@@ -23,6 +23,48 @@ Swift 0.95               | http://swift-lang.org                          | Requ
 
 In addition to installing these packages, there are also a number of python modules that must be installed. These are defined in pysims/requirements.txt. To install these packages in an automated way, run the command "pip install -r requirements.txt" within a Python virtual environment. For more information on Python virtual environments, please see http://docs.python-guide.org/en/latest/dev/virtualenvs.
 
+Compiling the Models
+====================
+DSSAT 4.6:
+----------
+
+1. The DSSAT source code is on github.com and the repository is private. Request access from the DSSAT group for access.
+2. git clone git@github.com:DSSAT/dssat-csm.git (or https://github.com/DSSAT/dssat-csm.git for HTTPS)
+3. cd dssat-csm
+4. git checkout tags/v4.6.0.49
+5. patch -p1 < /path_to_psims/models/pdssat/dssat46.patch
+6. make
+7. Executable will be created as DSCSM046.EXE
+8. Use the example params file pysims/params.dssat.sample as a guide to help you get started
+
+APSIM 7.9:
+----------
+Install mono
+1. git clone git@github.com:mono/mono.git
+2. cd mono
+3. git checkout tags/mono-4.8.1.0
+4. Configure and set installation directory: ./configure --prefix=/installation/directory
+5. make && make install
+6. Add bin directory to PATH, and lib directory to LD_LIBRARY_PATH
+
+Install mono-basic
+1. git clone git@github.com:mono/mono-basic.git
+2. cd mono-basic
+3. Configure and set installation directory: ./configure --prefix=/installation/directory
+4. make && make install
+5. Add bin directory to PATH, and lib directory to LD_LIBRARY_PATH
+
+Install Apsim
+1. Checkout the source: svn co http://apsrunet.apsim.info/svn/apsim/tags/Apsim79
+2. cd Apsim79
+3. patch -p0 < /path_to_psims/models/papsim/papsim79.patch
+4. cd model/Build
+5. mcs VersionStamper.cs
+6. mono VersionStamper.exe Directory=$PWD
+7. ./MakeAll.sh
+8. Executable will be created as Model/ApsimModel.exe
+9. Refer to example params file pysims/params.apsim.sample
+
 Single Tile Simulation
 =======================
 Simulating a single tile is useful for testing purposes. It allows you to verify that your parameters are set correctly and to verify the simulation results looks reasonable. Create a new directory and change the The command for running a single point simulation is:
@@ -93,7 +135,7 @@ When pysims is run, the user must specify a campaign directory with the --campai
 The exp_template.json file contains key-value pairs for data that will be written to the experiment file. These values represent things like fertilizer amounts, irrigation settings, and planting dates. Static settings for the experiment are stored in exp_template.json. Values that vary by lat, lon, scenario, or time get stored in Campaign.nc4.
 
 Here is an example of irrigation definitions in exp_template.json.
-~~~
+~~
   "dssat_simulation_control": {
     "data": [
         "irrigation": {
@@ -105,7 +147,7 @@ Here is an example of irrigation definitions in exp_template.json.
           "iramt": "10",
           "ithrl": "80"
         },...
-~~~
+~~
 
 But users may not want to these irrigation settings everywhere. If they have a collection of irrigation amounts (iramt) that change by location, users may create a variable in Campaign.nc4 called iramt. The most basic version of this would be a NetCDF variable in the format of float iramt(lat, lon). When pysims runs for a given point, the appropriate value would transfer from Campaign.nc4 into the experiment file. If iramt is not defined in Campaign.nc4, the static value from exp_template.json is used instead.
 
@@ -124,12 +166,12 @@ levels    | Comma separated list of levels from the aggfile (example: gadm0, gad
 The aggfile and weightfile must match the resolution used in your simulation. To generate a new aggfile you can use the gdal_rasterize utility to convert from a gadm shapefile to a netcdf file, then use bin/create_agg_limits.py to add the required variables and dimensions.
 
 Example parameters:
-~~~
+~~
 aggregator:
     aggfile: /path/to/agg.nc
     weightfile: /path/to/weight.nc
     levels: gadm0
-~~~
+~~
 
 Obtaining Data
 ==============
@@ -169,3 +211,4 @@ There may be times when a psims run fails. Failures may be caused by problems wi
 	$ ./rerun.combinelat.sh   # Rerun all combinelat tasks
 	$ ./resume.aggregate.sh   # Continue aggregation from where a failed run has stopped
 	$ ./rerun.aggregate.sh    # Rerun all aggregation tasks
+	

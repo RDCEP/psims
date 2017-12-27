@@ -1,0 +1,65 @@
+model:       apsim79
+weather:     /project/joshuaelliott/testing/pysims/clim
+soils:       /project/joshuaelliott/testing/pysims/soils
+refdata:     /home/davidkelly999/test/refdata
+out_file:    apsim.test
+executable:  /project/joshuaelliott/users/davidk/Apsim79/Model/ApsimModel.exe
+outtypes:    .met,.apsim,.out,.json,.txt
+
+ref_year:    1980
+num_years:   31
+scen_years:  31
+scens: 2
+
+delta:       "30,30"
+tdelta:      "120,120"
+
+num_lats:    360
+num_lons:    720
+lat_zero:    90
+lon_zero:    -180
+irr_flag:    true
+irr_1st:     false
+
+# Variables to extract
+variables:   biomass,yield,planting_date,DaysAfterSowing,flowering_das,maturity_das,RainIn,Temp_year,TempIn,RadiationIn,IrrigationIn,WaterUse,actual_ET,FertiliserIn,NO3_leaching,N2Oemission_year,N2OemissionIn,CO2emission_year,CO2emissionIn
+var_units:   "kg/ha,kg/ha,day,days,days,days,mm,oC,oC,MJ/m2,mm,mm,mm,kg/ha,kgN/ha,kgN2O/ha,kgN2O/ha,kgC/ha,kgC/ha"
+long_names:  "biomass,yield,DateOfPlanting,DaysAfterSowing,flowering_das,maturity_das,RainIn,Temp_year,TempIn,RadiationIn,IrrigationIn,WaterUse,actual_ET,FertiliserIn,NO3_leaching,N2Oemission_year,N2OemissionIn,CO2emission_year,CO2emissionIn"
+
+# Campaign translator
+tappcmp:
+   class:         camp2json
+   campaignfile:  Campaign.nc4
+   expfile:       exp_template.json
+   outputfile:    experiment.json
+
+# Input translator
+tappinp:
+    class:         apsim75.jsons2apsim
+    soilfile:      soil.json
+    soiltile:      1.soil.nc4
+    expfile:       experiment.json
+    templatefile:  template.apsim
+    outputfile:    Generic.apsim
+
+# Weather translator
+tappwth:
+   class:      apsim75.psims2met
+   inputfile:  1.clim.nc4
+   variables:  tasmin,tasmax,rsds,pr,wind
+   outputfile: Generic.met
+
+# Post processing translation
+postprocess:
+    class:     apsim75.out2psims
+    inputfile: Generic.out
+
+tapptilewth:
+    class:     tile_translator
+
+tapptilesoil:
+    class:     tile_translator_soil
+
+tappnooutput:
+    class: nooutput2psims
+

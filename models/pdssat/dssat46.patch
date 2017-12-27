@@ -1,0 +1,398 @@
+diff --git c/Makefile i/Makefile
+new file mode 100644
+index 0000000..876f9df
+--- /dev/null
++++ i/Makefile
+@@ -0,0 +1,44 @@
++FC = ifort
++FFLAGS =  -nowarn -g -std95 -traceback
++TARGET = DSCSM046.EXE
++
++OBJECTS = $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.for, %.o, $(wildcard *.for)) $(patsubst %.FOR, %.o, $(wildcard *.FOR)) $(patsubst %.F90, %.o, $(wildcard *.F90))
++
++all: modules dirs $(TARGET)
++
++$(TARGET): $(OBJECTS)
++	$(FC) -o $@ SALUS/*.o ttutil/*.o ORYZA/*.o OP_OBS/*.o $^ $(FFLAGS)
++
++%.o: %.f90 $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++%.o: %.F90 $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++%.o: %.for $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++%.o: %.FOR $(MODULES)
++	$(FC) -c $(FFLAGS) $^ -o $@
++
++dirs:
++	cd SALUS; make
++	cd ttutil; make
++	cd ORYZA; make
++	cd OP_OBS; make
++
++clean:
++	$(RM) $(TARGET) $(OBJECTS) *.mod
++	cd SALUS; make clean
++	cd ttutil; make clean
++	cd ORYZA; make clean
++	cd OP_OBS; make clean
++
++modules:
++	ifort -fixed -c ModuleDefs.for
++	ifort -fixed -c OPHEAD.for
++	ifort -fixed -c SoilMixing.for
++	ifort -fixed -c SLigCeres.for
++	ifort -fixed -c OPSUM.for
++	ifort -fixed -c SC_CNG_mods.for
++	ifort -fixed -c IPSOIL.for
+diff --git c/OP_OBS/Makefile i/OP_OBS/Makefile
+new file mode 100644
+index 0000000..8f448b7
+--- /dev/null
++++ i/OP_OBS/Makefile
+@@ -0,0 +1,11 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I.. -I../ttutil
++OBJECTS = $(patsubst %.f90, %.o, $(wildcard *.f90))
++all: $(OBJECTS)
++
++%.o: %.f90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++clean:
++	rm $(TARGET) $(OBJECTS) 
+diff --git c/ORYZA/Makefile i/ORYZA/Makefile
+new file mode 100644
+index 0000000..1f2a009
+--- /dev/null
++++ i/ORYZA/Makefile
+@@ -0,0 +1,21 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I.. -I../ttutil
++OBJECTS = $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.for, %.o, $(wildcard *.for))
++all: VARIABLE.o OR_ROOTG.o $(OBJECTS)
++
++%.o: %.f90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.for
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++
++VARIABLE.o:
++	$(FC) -c $(FFLAGS) $(INC) VARIABLE.f90
++
++OR_ROOTG.o:
++	$(FC) -c $(FFLAGS) $(INC) OR_ROOTG.f90
++
++clean:
++	rm $(TARGET) $(OBJECTS) *.mod
+diff --git c/SALUS/Makefile i/SALUS/Makefile
+new file mode 100644
+index 0000000..8695788
+--- /dev/null
++++ i/SALUS/Makefile
+@@ -0,0 +1,18 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I..
++OBJECTS = $(patsubst %.for, %.o, $(wildcard *.for)) $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.FOR, %.o, $(wildcard *.FOR))
++
++all: $(OBJECTS)
++
++%.o: %.for
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.f90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.FOR
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++clean:
++	rm $(TARGET) $(OBJECTS) 
+diff --git c/ttutil/Makefile i/ttutil/Makefile
+new file mode 100644
+index 0000000..b577c21
+--- /dev/null
++++ i/ttutil/Makefile
+@@ -0,0 +1,23 @@
++FC = ifort
++FFLAGS =  -nowarn -std95 -g -traceback
++INC = -I..
++OBJECTS = $(patsubst %.for, %.o, $(wildcard *.for)) $(patsubst %.f90, %.o, $(wildcard *.f90)) $(patsubst %.FOR, %.o, $(wildcard *.FOR))
++all: outdat.o ttutilprefs.o $(OBJECTS)
++
++%.o: %.for 
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.f90
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++%.o: %.FOR
++	$(FC) -c $(FFLAGS) $(INC) $^
++
++outdat.o: 
++	$(FC) -c $(FFLAGS) $(INC) outdat.f90
++
++ttutilprefs.o:
++	$(FC) -c $(FFLAGS) $(INC) ttutilprefs.f90
++
++clean:
++	rm $(TARGET) $(OBJECTS) *.mod
+--------------------------------------------------
+Changes not staged for commit:
+diff --git i/CRSIMDEF.for w/CRSIMDEF.for
+index f2e5a56..d887d5e 100644
+--- i/CRSIMDEF.for
++++ w/CRSIMDEF.for
+@@ -7,7 +7,7 @@
+ 
+       SAVE
+ 
+-      CHARACTER(LEN=1),PARAMETER::SLASH = '\' !DOS, Windows
+-!     CHARACTER(LEN=1),PARAMETER::SLASH = '/' !Linux, Unix
++!     CHARACTER(LEN=1),PARAMETER::SLASH = '\' !DOS, Windows
++      CHARACTER(LEN=1),PARAMETER::SLASH = '/' !Linux, Unix
+ 
+       END MODULE CRSIMDEF
+diff --git i/INVAR.for w/INVAR.for
+index f23d69b..453ccc5 100644
+--- i/INVAR.for
++++ w/INVAR.for
+@@ -35,7 +35,7 @@ C=======================================================================
+ 
+       IMPLICIT     NONE
+ 
+-      INCLUDE     'COMGEN.BLK'
++      INCLUDE     'COMGEN.blk'
+ 
+       CHARACTER*1  LINE(80),ANS,RNMODE,BLANK,UPCASE
+       CHARACTER*6  GNAME(18),VARTY,ECONO
+@@ -252,7 +252,7 @@ C=======================================================================
+ 
+       IMPLICIT  NONE
+ 
+-      INCLUDE  'COMGEN.BLK'
++      INCLUDE  'COMGEN.blk'
+ 
+       INTEGER     IERR,IPARAM,NDEX
+       CHARACTER*2 CROP
+@@ -962,7 +962,7 @@ C=======================================================================
+ 
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMGEN.BLK'
++      INCLUDE 'COMGEN.blk'
+ 
+       INTEGER  IERR,IPARAM,NDEX,L
+ C
+diff --git i/IPSIM.for w/IPSIM.for
+index fa52a00..b897c88 100644
+--- i/IPSIM.for
++++ w/IPSIM.for
+@@ -48,7 +48,7 @@ C=======================================================================
+       IMPLICIT NONE
+       SAVE
+ 
+-      INCLUDE 'COMSWI.BLK'
++      INCLUDE 'COMSWI.blk'
+ 
+       CHARACTER*1   UPCASE,ISIMI, RNMODE
+       CHARACTER*2   CROP
+@@ -688,8 +688,8 @@ C-----------------------------------------------------------------------
+      &      CONTROL, ISWITCH, FROP, MODEL, NYRS, RNMODE)
+       USE ModuleDefs 
+       USE ModuleData
+-      INCLUDE 'COMSWI.BLK'
+-      INCLUDE 'COMIBS.BLK'
++      INCLUDE 'COMSWI.blk'
++      INCLUDE 'COMIBS.blk'
+ 
+       CHARACTER*1 RNMODE
+       CHARACTER*8 MODEL
+diff --git i/IPSOIL_Inp.for w/IPSOIL_Inp.for
+index 6698199..cb67b9d 100644
+--- i/IPSOIL_Inp.for
++++ w/IPSOIL_Inp.for
+@@ -37,7 +37,7 @@ C=======================================================================
+       USE ModuleDefs
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMSOI.BLK'
++      INCLUDE 'COMSOI.blk'
+ 
+       CHARACTER*1   LINE(80),RNMODE,BLANK,ANS,UPCASE
+       CHARACTER*5   MH(NL)
+diff --git i/IPVAR.for w/IPVAR.for
+index ac481d8..b690918 100644
+--- i/IPVAR.for
++++ w/IPVAR.for
+@@ -43,7 +43,7 @@ C=======================================================================
+ 
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMGEN.BLK'
++      INCLUDE 'COMGEN.blk'
+ 
+       CHARACTER*1   LINE(80),RNMODE,BLANK,ANS
+       CHARACTER*2   CROP
+diff --git i/ModuleDefs.for w/ModuleDefs.for
+index 487bb78..b070ddf 100644
+--- i/ModuleDefs.for
++++ w/ModuleDefs.for
+@@ -40,8 +40,8 @@ C             CHP Added TRTNUM to CONTROL variable.
+ !=======================================================================
+ !     Change this line to switch between Windows and Linux compilers
+ !     Operating system
+-      CHARACTER(LEN=5), PARAMETER :: OPSYS = 'WINDO'   !DOS, Windows
+-!     CHARACTER(LEN=5), PARAMETER :: OPSYS = 'LINUX'   !Linux, UNIX
++!     CHARACTER(LEN=5), PARAMETER :: OPSYS = 'WINDO'   !DOS, Windows
++      CHARACTER(LEN=5), PARAMETER :: OPSYS = 'LINUX'   !Linux, UNIX
+ 
+ !=======================================================================
+ !     Compiler directives used to set library for system calls
+diff --git i/OPGEN.for w/OPGEN.for
+index adc426b..36872fd 100644
+--- i/OPGEN.for
++++ w/OPGEN.for
+@@ -38,8 +38,8 @@ C=======================================================================
+       USE ModuleDefs
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMSOI.BLK'
+-      INCLUDE 'COMSWI.BLK'
++      INCLUDE 'COMSOI.blk'
++      INCLUDE 'COMSWI.blk'
+ 
+       CHARACTER*  1 ANS, RNMODE
+       CHARACTER*  2 CROP
+diff --git i/OPHEAD.for w/OPHEAD.for
+index 4617b1a..86e0606 100644
+--- i/OPHEAD.for
++++ w/OPHEAD.for
+@@ -143,9 +143,9 @@ C=======================================================================
+       IMPLICIT NONE
+       SAVE
+ 
+-      INCLUDE 'COMSWI.BLK'
+-      INCLUDE 'COMSOI.BLK'
+-      INCLUDE 'COMIBS.BLK'
++      INCLUDE 'COMSWI.blk'
++      INCLUDE 'COMSOI.blk'
++      INCLUDE 'COMIBS.blk'
+ 
+       CHARACTER*1   RNMODE
+       CHARACTER*3   RMP,RMS
+@@ -531,7 +531,7 @@ C=======================================================================
+       USE HeaderMod
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMGEN.BLK'
++      INCLUDE 'COMGEN.blk'
+ 
+       CHARACTER*1  ISWWAT, RNMODE
+       CHARACTER*2  CROP
+@@ -971,8 +971,8 @@ C========================================================================
+       USE ModuleData
+       USE HeaderMod
+       IMPLICIT NONE
+-      INCLUDE 'COMIBS.BLK'
+-      INCLUDE 'COMSWI.BLK'
++      INCLUDE 'COMIBS.blk'
++      INCLUDE 'COMSWI.blk'
+       SAVE
+ 
+       CHARACTER*6, PARAMETER :: ERRKEY = 'HEADER'
+diff --git i/OPTEMPXY2K.for w/OPTEMPXY2K.for
+index 36b55f5..4553ff2 100644
+--- i/OPTEMPXY2K.for
++++ w/OPTEMPXY2K.for
+@@ -46,10 +46,10 @@ C=======================================================================
+       USE ModuleDefs
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMIBS.BLK'
+-      INCLUDE 'COMSOI.BLK'
+-      INCLUDE 'COMSWI.BLK'
+-      INCLUDE 'COMGEN.BLK'
++      INCLUDE 'COMIBS.blk'
++      INCLUDE 'COMSOI.blk'
++      INCLUDE 'COMSWI.blk'
++      INCLUDE 'COMGEN.blk'
+ 
+       CHARACTER* 2 CROP,PRCROP,LABL
+       CHARACTER* 6 VARNO, ECONO
+diff --git i/SENS.for w/SENS.for
+index e9f2ebd..eee6c82 100644
+--- i/SENS.for
++++ w/SENS.for
+@@ -40,9 +40,9 @@ C=======================================================================
+       USE ModuleDefs
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMIBS.BLK'
+-      INCLUDE 'COMSOI.BLK'
+-      INCLUDE 'COMSWI.BLK'
++      INCLUDE 'COMIBS.blk'
++      INCLUDE 'COMSOI.blk'
++      INCLUDE 'COMSWI.blk'
+ 
+       CHARACTER*1  ANS,WMODI,SWSPRF, RNMODE
+       CHARACTER*2  CROPC,CROP,PRCROP
+diff --git i/input_sub.for w/input_sub.for
+index 5a31475..f289220 100644
+--- i/input_sub.for
++++ w/input_sub.for
+@@ -87,9 +87,9 @@ C=======================================================================
+       IMPLICIT NONE
+       SAVE
+ 
+-      INCLUDE 'COMSOI.BLK'
+-      INCLUDE 'COMIBS.BLK'
+-      INCLUDE 'COMSWI.BLK'
++      INCLUDE 'COMSOI.blk'
++      INCLUDE 'COMIBS.blk'
++      INCLUDE 'COMSWI.blk'
+ 
+       CHARACTER*  1 WMODI, RNMODE
+       CHARACTER*  2 CROP,PRCROP
+diff --git i/ipexp.for w/ipexp.for
+index 64759c1..ed2485a 100644
+--- i/ipexp.for
++++ w/ipexp.for
+@@ -70,8 +70,8 @@ C=======================================================================
+       IMPLICIT NONE
+       SAVE
+ 
+-      INCLUDE 'COMIBS.BLK'
+-      INCLUDE 'COMSWI.BLK'
++      INCLUDE 'COMIBS.blk'
++      INCLUDE 'COMSWI.blk'
+ 
+       CHARACTER* 1 LINE(80),BLANK, RNMODE
+       CHARACTER* 1 WMODI,ANS
+diff --git i/optempy2k.for w/optempy2k.for
+index 54cfb2f..075e924 100644
+--- i/optempy2k.for
++++ w/optempy2k.for
+@@ -60,10 +60,10 @@ C=======================================================================
+       USE ModuleDefs
+       IMPLICIT NONE
+ 
+-      INCLUDE 'COMIBS.BLK'
+-      INCLUDE 'COMSOI.BLK'
+-      INCLUDE 'COMSWI.BLK'
+-      INCLUDE 'COMGEN.BLK'
++      INCLUDE 'COMIBS.blk'
++      INCLUDE 'COMSOI.blk'
++      INCLUDE 'COMSWI.blk'
++      INCLUDE 'COMGEN.blk'
+ 
+       CHARACTER*1  RNMODE
+       CHARACTER*2  CROP,PRCROP
