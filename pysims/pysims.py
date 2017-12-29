@@ -128,6 +128,33 @@ config.set('slatidx',   args.slatidx)
 config.set('slonidx',   args.slonidx)
 config.set('split',     args.split)
 
+# Set simulation deltas
+delta_list = str(config.get('delta')).split(',')
+if len(delta_list) == 1:
+   latdelta = double(delta_list[0])
+   londelta = latdelta
+elif len(delta_list) == 2:
+   latdelta = double(delta_list[0])
+   londelta = double(delta_list[1])
+else:
+    sys.exit("Invalid delta value. Please specify 1, 2, or 4 values.")
+
+# Set tile deltas and indices
+tdelta_list = str(config.get('tdelta')).split(',')
+if len(tdelta_list) == 1:
+   tlatdelta = double(tdelta_list[0])
+   tlondelta = tlatdelta
+elif len(tdelta_list) == 2 or len(tdelta_list) == 4:
+   tlatdelta = double(tdelta_list[0])
+   tlondelta = double(tdelta_list[1])
+else:
+   sys.exit("Invalid tdelta value. Please specify 1, 2, or 4 values.")
+
+config.set('latdelta',  latdelta)
+config.set('londelta',  londelta)
+config.set('tlatdelta', tlatdelta)
+config.set('tlondelta', tlondelta)
+
 ref_year      = config.get('ref_year')
 num_years     = config.get('num_years')
 daily         = config.get('daily_variables')
